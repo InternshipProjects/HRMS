@@ -27,5 +27,7 @@
             </column>
         </createTable>
         <addUniqueConstraint constraintName="regiestration_no_unique" columnNames="registration_no" tableName="company"/>
+        <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="false" generationType="ALWAYS"
+            incrementBy="1" startWith="1" tableName="company"/>
     </changeSet>
 </databaseChangeLog>

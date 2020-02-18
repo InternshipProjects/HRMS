@@ -27,7 +27,13 @@
         <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="project"
             constraintName="client_id_fk" referencedColumnNames="id" referencedTableName="client"/>
 
+        <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="false" generationType="ALWAYS"
+            incrementBy="1" startWith="1" tableName="project"/>
+
         <createTable tableName="project_allocation">
+            <column name="id" type="int">
+                <constraints nullable="false"/>
+            </column>
             <column name="employee_id" type="int">
                 <constraints nullable="false"/>
             </column>
@@ -41,6 +47,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="false" generationType="ALWAYS"
+            incrementBy="1" startWith="1" tableName="project_allocation"/>
 
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="project_allocation" 
             constraintName="emp_id_fk" referencedColumnNames="id" referencedTableName="employee"/>
