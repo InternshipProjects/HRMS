@@ -1,29 +1,43 @@
+const sequelize = require('../process/connect_sequelize');
+const EmployeeModel = require('../models/employee')(sequelize);
+
 class EmployeeController {
-  handleQuery(type, resources, params) {
-    switch (type) {
+  handleQuery(input) {
+    const queryType = input.queryType;
+    const resources = input.resources;
+    const params = input.params;
+    switch (queryType) {
       case 'POST':
-        this.insert(resources, params);
-        break;
+        return this.insert(resources, params);
       case 'GET':
-        this.select(resources, params);
-        break;
+        return this.select(resources, params);
       case 'PATCH':
-        this.select(resources, params);
-        break;
+        return this.update(resources, params);
       case 'DELETE':
-        this.delete(resources, params);
-        break;
+        return this.delete(resources, params);
     }
+    throw `Invalid query type: ${queryType}`;
   }
 
-  insert(resources, params) {}
+  insert(resources, params) {
+    return EmployeeModel.create(params);
+  }
 
-  select(resources, params) {}
+  select(resources, params) {
+    return EmployeeModel.findAll({ where: params }).then(result => {
+      if (result) {
+        console.log(JSON.stringify(result, null, 4));
+      }
+    });
+  }
 
-  update(resources, params) {}
+  update(resources, params) {
+    return EmployeeModel.update(params, { where: params });
+  }
 
-  delete(resources, params) {}
+  delete(resources, params) {
+    return EmployeeModel.destroy({ where: params });
+  }
 }
 
-let employeeController = new EmployeeController();
-module.exports = employeeController;
+module.exports = new EmployeeController();

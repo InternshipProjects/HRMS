@@ -1,7 +1,7 @@
 const sequelize = require('../process/connect_sequelize');
-const ProjectModel = require('../models/project')(sequelize);
+const ClientModel = require('../models/client')(sequelize);
 
-class ProjectController {
+class ClientController {
   handleQuery(input) {
     const queryType = input.queryType;
     const resources = input.resources;
@@ -12,30 +12,32 @@ class ProjectController {
       case 'GET':
         return this.select(resources, params);
       case 'PATCH':
-        return this.update(input.resources, params);
+        return this.update(resources, params);
       case 'DELETE':
-        return this.delete(input.resources, params);
+        return this.delete(resources, params);
     }
     throw `Invalid query type: ${queryType}`;
   }
 
   insert(resources, params) {
-    return ProjectModel.create(params);
+    return ClientModel.create(params);
   }
 
   select(resources, params) {
-    return ProjectModel.findAll({ where: params }).then(result => {
+    return ClientModel.findAll({ where: params }).then(result => {
       if (result) {
         console.log(JSON.stringify(result, null, 4));
       }
     });
   }
+
   update(resources, params) {
-    return ProjectModel.update({ params }, { where: params });
+    return ClientModel.update(params, { where: params });
   }
+
   delete(resources, params) {
-    return ProjectModel.destroy({ where: params });
+    return ClientModel.destroy({ where: params });
   }
 }
 
-module.exports = new ProjectController();
+module.exports = new ClientController();
