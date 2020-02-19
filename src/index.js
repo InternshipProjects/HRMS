@@ -1,6 +1,6 @@
 const { resolve } = require('path');
 require('dotenv').config({
-  path: resolve(__dirname, './config/dev.env')
+  path: resolve(__dirname, '../config/dev.env')
 });
 
 const convertXlsxToJson = require('./xlsx/parse_xlsx');
