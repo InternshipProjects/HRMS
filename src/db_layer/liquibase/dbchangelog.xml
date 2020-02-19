@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="bhagya" id="3">
+        <addForeignKeyConstraint baseColumnNames="skill_id"
+                baseTableCatalogName="cat"
+                baseTableName="employee"
+                baseTableSchemaName="public"
+                constraintName="fk_employee_company1"
+                deferrable="true"
+                initiallyDeferred="true"
+                onDelete="CASCADE"
+                onUpdate="RESTRICT"
+                referencedColumnNames="skill_id"
+                referencedTableCatalogName="cat"
+                referencedTableName="skillset"
+                referencedTableSchemaName="public"
+                validate="true"/>
+        <addForeignKeyConstraint baseColumnNames="client_id"
+                baseTableCatalogName="cat"
+                baseTableName="project"
+                baseTableSchemaName="public"
+                constraintName="fk_employee_company"
+                deferrable="true"
+                initiallyDeferred="true"
+                onDelete="CASCADE"
+                onUpdate="RESTRICT"
+                referencedColumnNames="client_id"
+                referencedTableCatalogName="cat"
+                referencedTableName="client"
+                referencedTableSchemaName="public"
+                validate="true"/>
+          <addForeignKeyConstraint baseColumnNames="proj_no"
+                baseTableCatalogName="cat"
+                baseTableName="skillset"
+                baseTableSchemaName="public"
+                constraintName="fk_skillset_project"
+                deferrable="true"
+                initiallyDeferred="true"
+                onDelete="CASCADE"
+                onUpdate="RESTRICT"
+                referencedColumnNames="proj_no"
+                referencedTableCatalogName="cat"
+                referencedTableName="project"
+                referencedTableSchemaName="public"
+                validate="true"/>
+          <addForeignKeyConstraint baseColumnNames="proj_no"
+                baseTableCatalogName="cat"
+                baseTableName="project_allocation"
+                baseTableSchemaName="public"
+                constraintName="fk_projalloc_proj"
+                deferrable="true"
+                initiallyDeferred="true"
+                onDelete="CASCADE"
+                onUpdate="RESTRICT"
+                referencedColumnNames="proj_no"
+                referencedTableCatalogName="cat"
+                referencedTableName="project"
+                referencedTableSchemaName="public"
+                validate="true"/>
+    </changeSet>
+
+</databaseChangeLog>
