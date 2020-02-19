@@ -30,9 +30,11 @@ class ProjectController {
       }
     });
   }
+
   update(resources, params) {
-    return ProjectModel.update({ params }, { where: params });
+    return ProjectModel.update({ params }, { where: { name: params['name'] } });
   }
+
   delete(resources, params) {
     return ProjectModel.destroy({ where: params });
   }

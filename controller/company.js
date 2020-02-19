@@ -32,7 +32,9 @@ class CompanyController {
   }
 
   update(resources, params) {
-    return CompanyModel.update(params, { where: params });
+    return CompanyModel.update(params, {
+      where: { registration_no: params['registration_no'] }
+    });
   }
 
   delete(resources, params) {

@@ -32,7 +32,7 @@ class ClientController {
   }
 
   update(resources, params) {
-    return ClientModel.update(params, { where: params });
+    return ClientModel.update(params, { where: { name: params['name'] } });
   }
 
   delete(resources, params) {

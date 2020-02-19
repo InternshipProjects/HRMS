@@ -32,7 +32,9 @@ class EmployeeController {
   }
 
   update(resources, params) {
-    return EmployeeModel.update(params, { where: params });
+    return EmployeeModel.update(params, {
+      where: { emp_id: params['emp_id'] }
+    });
   }
 
   delete(resources, params) {
