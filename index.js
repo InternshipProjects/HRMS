@@ -3,12 +3,17 @@ require('dotenv').config({
   path: resolve(__dirname, './config/dev.env')
 });
 
-const convertToJson = require('./xlsx/parse_xlsx');
-const processJson = require('./process/process.js');
+const convertXlsxToJson = require('./xlsx/parse_xlsx');
+const jsonHandler = require('./process/json_handler.js');
+const queriesHandler = require('./controller/queries_handler');
 
-const json = convert_to_json(
-  resolve(__dirname, './input/queries.xlsx'),
-  'All Operations'
-);
+main = () => {
+  const json = convertXlsxToJson(
+    resolve(__dirname, './input/HRMS-queries.xlsx'),
+    'queries'
+  );
+  const queriesData = jsonHandler.convertJsonToQueryInput(json);
+  queriesHandler.handleQueries(queriesData);
+};
 
-processJson(json);
+main();
