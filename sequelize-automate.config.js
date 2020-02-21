@@ -1,11 +1,13 @@
+require('dotenv').config({ path: './config/dev.env' });
+
 module.exports = {
   dbOptions: {
-    database: 'hrms',
-    username: 'dhana',
-    password: 'dhana123',
-    dialect: 'postgres',
-    host: 'localhost',
-    port: 5432,
+    database: process.env.DB_NAME,
+    username: process.env.DB_USERNAME,
+    password: process.env.DB_PASSWORD,
+    dialect: process.env.DB_TYPE,
+    host: process.env.HOST,
+    port: process.env.DB_PORT,
     logging: false
   },
   options: {
