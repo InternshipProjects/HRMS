@@ -17,11 +17,9 @@
     "url": "https://github.com/InternshipProjects/HRMS-DB/issues"
   },
   "homepage": "https://github.com/InternshipProjects/HRMS-DB#readme",
-  "devDependencies": {
-    "dotenv": "^8.2.0"
-  },
   "dependencies": {
-    "loglevel": "^1.6.7",
+    "bluebird": "^3.7.2",
+    "dotenv": "^8.2.0",
     "pg": "^7.18.1",
     "sequelize": "^5.21.4",
     "sequelize-automate": "^1.2.0",
