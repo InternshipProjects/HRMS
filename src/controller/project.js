@@ -1,22 +1,21 @@
-const sequelize = require('../process/connect_sequelize');
+const sequelize = require('../utils/connect_sequelize');
 const ProjectModel = require('../models/project')(sequelize);
 
 class ProjectController {
-  handleQuery(input) {
-    const queryType = input.queryType;
-    const resources = input.resources;
-    const params = input.params;
-    switch (queryType) {
-      case 'POST':
-        return this.insert(resources, params);
-      case 'GET':
-        return this.select(resources, params);
-      case 'PATCH':
-        return this.update(input.resources, params);
-      case 'DELETE':
-        return this.delete(input.resources, params);
+  handleQuery(queryInput) {
+    const queries = {
+      POST: this.insert,
+      GET: this.select,
+      PATCH: this.update,
+      DELETE: this.delete
+    };
+    const { queryType, resources, params } = queryInput;
+    try {
+      return queries[queryType](resources, params);
+    } catch (error) {
+      console.error(error);
+      throw `Invalid query type: ${queryType}`;
     }
-    throw `Invalid query type: ${queryType}`;
   }
 
   insert(resources, params) {
