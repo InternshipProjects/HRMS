@@ -28,5 +28,4 @@ class JsonHandler {
   }
 }
 
-let jsonHandler = new JsonHandler();
-module.exports = jsonHandler;
+module.exports = new JsonHandler();
