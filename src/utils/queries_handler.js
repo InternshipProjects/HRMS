@@ -11,7 +11,6 @@ class QueriesHandler {
     })
       .then(results => {
         console.log('------- All queries executed -----');
-        console.log(results);
       })
       .catch(error => {
         console.error(error);
