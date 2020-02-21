@@ -3,13 +3,13 @@ const EmployeeModel = require('../models/employee')(sequelize);
 
 class EmployeeController {
   handleQuery(queryInput) {
+    const { queryType, resources, params } = queryInput;
     const queries = {
       POST: this.insert,
       GET: this.select,
       PATCH: this.update,
       DELETE: this.delete
     };
-    const { queryType, resources, params } = queryInput;
     try {
       return queries[queryType](resources, params);
     } catch (error) {
