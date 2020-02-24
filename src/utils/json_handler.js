@@ -19,12 +19,11 @@ class JsonHandler {
   getParameters(record) {
     let params = {};
     for (let key in record) {
-      if (/P\d/.test(key)) {
+      if (/^P\d/.test(key)) {
         let values = record[key].split(':').map(value => value.trim());
         params[values[0]] = values[1];
       }
     }
-    console.log(params);
     return params;
   }
 }
