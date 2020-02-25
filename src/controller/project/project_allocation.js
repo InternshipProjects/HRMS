@@ -1,56 +1,9 @@
-const sequelize = require('../utils/connect_sequelize');
-const ProjectModel = require('../models/project')(sequelize);
-const ProjectAllocationModel = require('../models/project_allocation')(
+const sequelize = require('../../utils/connect_sequelize');
+const ProjectAllocationModel = require('../../models/project_allocation')(
   sequelize
 );
-const EmployeeController = require('./employee');
-
-class ProjectController {
-  handleQuery(queryInput) {
-    const { queryType, resource, params } = queryInput;
-    switch (resource) {
-      case 'project':
-        const project = new Project();
-        return project.query(queryType, params);
-      case 'allocate_project':
-        const projectAllocate = new ProjectAllocation();
-        return projectAllocate.query(queryType, params);
-    }
-  }
-}
-
-class Project {
-  async query(queryType, params) {
-    const queries = {
-      POST: this.insert,
-      GET: this.select,
-      PATCH: this.update,
-      DELETE: this.delete
-    };
-    try {
-      return queries[queryType](params);
-    } catch (error) {
-      throw `Invalid query type: ${queryType}`;
-    }
-  }
-
-  async insert(params) {
-    await ProjectModel.create(params);
-  }
-
-  async select(params) {
-    const results = await ProjectModel.findAll({ where: params });
-    return results[0].dataValues;
-  }
-
-  async update(params) {
-    await ProjectModel.update({ params }, { where: { name: params['name'] } });
-  }
-
-  async delete(params) {
-    await ProjectModel.destroy({ where: params });
-  }
-}
+const EmployeeController = require('../employee/controller');
+const Project = require('./project');
 
 class ProjectAllocation {
   query(queryType, params) {
@@ -73,8 +26,7 @@ class ProjectAllocation {
       resource: 'employee',
       params: { emp_id: params.emp_id }
     });
-    const projectObj = new Project();
-    const projectInfo = await projectObj.select({ name: params.project_name });
+    const projectInfo = await Project.select({ name: params.project_name });
     await ProjectAllocationModel.create({
       employee_id: employeeInfo.id,
       project_id: projectInfo.id,
@@ -104,8 +56,7 @@ class ProjectAllocation {
   }
 
   async selectBasedOnProjectName(projectName) {
-    const projectObj = new Project();
-    const projectInfo = await projectObj.select({
+    const projectInfo = await Project.select({
       name: projectName
     });
     const results = await ProjectAllocationModel.findAll({
@@ -120,8 +71,7 @@ class ProjectAllocation {
       resource: 'employee',
       params: { emp_id: empId }
     });
-    const projectObj = new Project();
-    const projectInfo = await projectObj.select({
+    const projectInfo = await Project.select({
       name: projectName
     });
     const results = await ProjectAllocationModel.findAll({
@@ -179,4 +129,4 @@ class ProjectAllocation {
   }
 }
 
-module.exports = new ProjectController();
+module.exports = new ProjectAllocation();
