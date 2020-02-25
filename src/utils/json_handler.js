@@ -2,9 +2,9 @@ class JsonHandler {
   convertJsonToQueryInput(queriesData) {
     return queriesData.map(record => {
       const queryType = this.getQueryType(record);
-      const resources = this.getResources(record);
+      const resource = this.getResource(record);
       const params = this.getParameters(record);
-      return { queryType, resources, params };
+      return { queryType, resource, params };
     });
   }
 
@@ -12,8 +12,8 @@ class JsonHandler {
     return record['Query type'].trim();
   }
 
-  getResources(record) {
-    return record['Resource'].split(',').map(resource => resource.trim());
+  getResource(record) {
+    return record['Resource'].trim();
   }
 
   getParameters(record) {
