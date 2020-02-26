@@ -1,6 +1,4 @@
-const {
-  DataTypes
-} = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 module.exports = sequelize => {
   const attributes = {
@@ -9,8 +7,8 @@ module.exports = sequelize => {
       allowNull: false,
       defaultValue: null,
       comment: null,
-      primaryKey: false,
-      field: "id",
+      primaryKey: true,
+      field: 'id',
       autoIncrement: true
     },
     employee_id: {
@@ -19,11 +17,11 @@ module.exports = sequelize => {
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "employee_id",
+      field: 'employee_id',
       autoIncrement: false,
       references: {
-        key: "id",
-        model: "employee_model"
+        key: 'id',
+        model: 'employee_model'
       }
     },
     project_id: {
@@ -32,11 +30,11 @@ module.exports = sequelize => {
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "project_id",
+      field: 'project_id',
       autoIncrement: false,
       references: {
-        key: "id",
-        model: "project_model"
+        key: 'id',
+        model: 'project_model'
       }
     },
     start_date: {
@@ -45,7 +43,7 @@ module.exports = sequelize => {
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "start_date",
+      field: 'start_date',
       autoIncrement: false
     },
     likely_end_date: {
@@ -54,15 +52,19 @@ module.exports = sequelize => {
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "likely_end_date",
+      field: 'likely_end_date',
       autoIncrement: false
     }
   };
   const options = {
-    tableName: "project_allocation",
-    comment: "",
+    tableName: 'project_allocation',
+    comment: '',
     indexes: []
   };
-  const ProjectAllocationModel = sequelize.define("project_allocation_model", attributes, options);
+  const ProjectAllocationModel = sequelize.define(
+    'project_allocation_model',
+    attributes,
+    options
+  );
   return ProjectAllocationModel;
 };
