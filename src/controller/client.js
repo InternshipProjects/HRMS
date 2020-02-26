@@ -2,8 +2,8 @@ const sequelize = require('../utils/connect_sequelize');
 const ClientModel = require('../models/client')(sequelize);
 
 class ClientController {
-  handleQuery(queryInput) {
-    const { queryType, resources, params } = queryInput;
+  async handleQuery(queryInput) {
+    const { queryType, params } = queryInput;
     const queries = {
       POST: this.insert,
       GET: this.select,
@@ -11,31 +11,28 @@ class ClientController {
       DELETE: this.delete
     };
     try {
-      return queries[queryType](resources, params);
+      return queries[queryType](params);
     } catch (error) {
       console.error(error);
       throw `Invalid query type: ${queryType}`;
     }
   }
 
-  insert(resources, params) {
-    return ClientModel.create(params);
+  async insert(params) {
+    await ClientModel.create(params);
   }
 
-  select(resources, params) {
-    return ClientModel.findAll({ where: params }).then(result => {
-      if (result) {
-        console.log(JSON.stringify(result, null, 4));
-      }
-    });
+  async select(params) {
+    const results = await ClientModel.findAll({ where: params });
+    return results[0].dataValues;
   }
 
-  update(resources, params) {
-    return ClientModel.update(params, { where: { name: params['name'] } });
+  async update(params) {
+    await ClientModel.update(params, { where: { name: params['name'] } });
   }
 
-  delete(resources, params) {
-    return ClientModel.destroy({ where: params });
+  async delete(params) {
+    await ClientModel.destroy({ where: params });
   }
 }
 
