@@ -2,8 +2,8 @@ const sequelize = require('../utils/connect_sequelize');
 const CompanyModel = require('../models/company')(sequelize);
 
 class CompanyController {
-  handleQuery(queryInput) {
-    const { queryType, resources, params } = queryInput;
+  async handleQuery(queryInput) {
+    const { queryType, params } = queryInput;
     const queries = {
       POST: this.insert,
       GET: this.select,
@@ -11,33 +11,32 @@ class CompanyController {
       DELETE: this.delete
     };
     try {
-      return queries[queryType](resources, params);
+      return queries[queryType](params);
     } catch (error) {
       console.error(error);
       throw `Invalid query type ${queryType}`;
     }
   }
 
-  insert(resources, params) {
-    return CompanyModel.create(params);
+  async insert(params) {
+    await CompanyModel.create(params);
   }
 
-  select(resources, params) {
-    return CompanyModel.findAll().then(result => {
-      if (result) {
-        console.log(JSON.stringify(result, null, 4));
-      }
+  async select(params) {
+    const results = await CompanyModel.findAll({ where: params });
+    return results[0].dataValues;
+  }
+
+  async update(params) {
+    let registrationNo = params['registration_no'];
+    delete params.registration_no;
+    await CompanyModel.update(params, {
+      where: { registration_no: registrationNo }
     });
   }
 
-  update(resources, params) {
-    return CompanyModel.update(params, {
-      where: { registration_no: params['registration_no'] }
-    });
-  }
-
-  delete(resources, params) {
-    return CompanyModel.destroy({ where: params });
+  async delete(params) {
+    await CompanyModel.destroy({ where: params });
   }
 }
 
