@@ -26,43 +26,25 @@ module.exports = sequelize => {
         model: "employee_model"
       }
     },
-    project_id: {
+    company_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "project_id",
+      field: "company_id",
       autoIncrement: false,
       references: {
         key: "id",
-        model: "project_model"
+        model: "company_model"
       }
-    },
-    start_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      defaultValue: null,
-      comment: null,
-      primaryKey: false,
-      field: "start_date",
-      autoIncrement: false
-    },
-    likely_end_date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      defaultValue: null,
-      comment: null,
-      primaryKey: false,
-      field: "likely_end_date",
-      autoIncrement: false
     }
   };
   const options = {
-    tableName: "project_allocation",
+    tableName: "company_employees",
     comment: "",
     indexes: []
   };
-  const ProjectAllocationModel = sequelize.define("project_allocation_model", attributes, options);
-  return ProjectAllocationModel;
+  const CompanyEmployeesModel = sequelize.define("company_employees_model", attributes, options);
+  return CompanyEmployeesModel;
 };
