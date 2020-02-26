@@ -32,7 +32,7 @@
 
         <createTable tableName="project_allocation">
             <column name="id" type="int">
-                <constraints nullable="false"/>
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="employee_id" type="int">
                 <constraints nullable="false"/>
