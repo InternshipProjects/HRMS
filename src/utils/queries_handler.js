@@ -1,6 +1,6 @@
 const Promise = require('bluebird');
-const employeeController = require('../controller/employee');
-const projectController = require('../controller/project');
+const employeeController = require('../controller/employee/controller');
+const projectController = require('../controller/project/controller');
 const companyController = require('../controller/company');
 const clientController = require('../controller/client');
 
@@ -19,17 +19,24 @@ class QueriesHandler {
 
   handleQuery(queryInput) {
     const controllers = {
-      employee: employeeController,
       company: companyController,
+
+      employee: employeeController,
+      employee_skills: employeeController,
+      company_employees: employeeController,
+
+      client: clientController,
+
       project: projectController,
-      project_allocation: projectController,
-      client: clientController
+      allocate_project: projectController,
+      client_projects: projectController,
+      availability: projectController
     };
     try {
-      return controllers[queryInput.resources[0]].handleQuery(queryInput);
+      return controllers[queryInput.resource].handleQuery(queryInput);
     } catch (error) {
       console.error(error);
-      throw `Invalid table name: ${queryInput.resources}`;
+      throw `Invalid table name: ${queryInput.resource}`;
     }
   }
 }
