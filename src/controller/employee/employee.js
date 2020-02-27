@@ -22,8 +22,8 @@ class Employee {
   }
 
   async select(params) {
-    const result = await EmployeeModel.findAll({ where: params });
-    return result[0].dataValues;
+    const results = await EmployeeModel.findAll({ raw: true, where: params });
+    return results;
   }
 
   async update(params) {
