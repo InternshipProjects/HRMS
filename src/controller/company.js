@@ -23,13 +23,12 @@ class CompanyController {
   }
 
   async select(params) {
-    const results = await CompanyModel.findAll({ where: params });
-    return results[0].dataValues;
+    const results = await CompanyModel.findAll({ raw: true, where: params });
+    return results;
   }
 
   async update(params) {
     let registrationNo = params['registration_no'];
-    delete params.registration_no;
     await CompanyModel.update(params, {
       where: { registration_no: registrationNo }
     });
