@@ -23,8 +23,7 @@ class ClientController {
   }
 
   async select(params) {
-    const results = await ClientModel.findAll({ where: params });
-    return results[0].dataValues;
+    return ClientModel.findAll({ raw: true, where: params });
   }
 
   async update(params) {
