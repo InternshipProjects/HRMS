@@ -21,12 +21,11 @@ class Project {
   }
 
   async select(params) {
-    const results = await ProjectModel.findAll({ where: params });
-    return results[0].dataValues;
+    return ProjectModel.findAll({ raw: true, where: params });
   }
 
   async update(params) {
-    await ProjectModel.update({ params }, { where: { name: params['name'] } });
+    await ProjectModel.update(params, { where: { name: params['name'] } });
   }
 
   async delete(params) {
