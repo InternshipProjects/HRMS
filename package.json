@@ -4,7 +4,7 @@
   "description": "HRMS database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha || true",
     "automate": "sequelize-automate -c sequelize-automate.config.js"
   },
   "repository": {
@@ -24,5 +24,9 @@
     "sequelize": "^5.21.4",
     "sequelize-automate": "^1.2.0",
     "xlsx": "^0.15.5"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^7.1.0"
   }
 }
