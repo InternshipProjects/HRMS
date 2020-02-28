@@ -20,6 +20,7 @@ class ProjectAllocation {
     }
   }
 
+  // params: {emp_id: string, project_name: string, start_date: Date, likely_end_date: }
   async insert(params, _this) {
     const employeeInfo = await EmployeeController.handleQuery({
       queryType: 'GET',
@@ -28,13 +29,14 @@ class ProjectAllocation {
     });
     const projectInfo = await Project.select({ name: params.project_name });
     await ProjectAllocationModel.create({
-      employee_id: employeeInfo.id,
-      project_id: projectInfo.id,
+      employee_id: employeeInfo[0].id,
+      project_id: projectInfo[0].id,
       start_date: params.start_date,
       likely_end_date: params.likely_end_date
     });
   }
 
+  // params: { emp_id?: string, project_name?: string }
   async select(params, _this) {
     if (params.emp_id) {
       return _this.selectBasedOnEmpId(params.emp_id);
@@ -49,20 +51,20 @@ class ProjectAllocation {
       resource: 'employee',
       params: { emp_id: empId }
     });
-    const results = await ProjectAllocationModel.findAll({
-      where: { employee_id: employeeInfo.id }
+    return ProjectAllocationModel.findAll({
+      raw: true,
+      where: { employee_id: employeeInfo[0].id }
     });
-    return results[0].dataValues;
   }
 
   async selectBasedOnProjectName(projectName) {
     const projectInfo = await Project.select({
       name: projectName
     });
-    const results = await ProjectAllocationModel.findAll({
-      where: { project_id: projectInfo.id }
+    return await ProjectAllocationModel.findAll({
+      raw: true,
+      where: { project_id: projectInfo[0].id }
     });
-    return results[0].dataValues;
   }
 
   async selectBasedOnEmpIdAndProjectName(empId, projectName) {
@@ -75,11 +77,12 @@ class ProjectAllocation {
       name: projectName
     });
     const results = await ProjectAllocationModel.findAll({
-      where: { project_id: projectInfo.id, employee_id: employeeInfo.id }
+      where: { project_id: projectInfo[0].id, employee_id: employeeInfo[0].id }
     });
     return results[0].dataValues;
   }
 
+  // params: {emp_id: string, project_name: string, start_date?: Date, likely_end_date?: Date}
   async update(params, _this) {
     const allocationInfo = await _this.selectBasedOnEmpIdAndProjectName(
       params.emp_id,
@@ -109,6 +112,7 @@ class ProjectAllocation {
     );
   }
 
+  //param: {emp_id: string[], project_name: string}
   async delete(params, _this) {
     const empIds = _this.getEmpIds(params);
     const promises = empIds.map(async empId => {
