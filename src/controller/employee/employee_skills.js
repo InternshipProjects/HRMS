@@ -1,3 +1,5 @@
+const { Promise } = require('bluebird');
+
 const sequelize = require('../../utils/connect_sequelize');
 const EmployeeSkillsModel = require('../../models/employee_skills')(sequelize);
 const Employee = require('./employee');
@@ -18,39 +20,41 @@ class EmployeeSkills {
     }
   }
 
+  // params - {emp_id: string, skills: string[]}
   async insert(params, _this) {
-    const employeeInfo = await Employee.select({ emp_id: params.emp_id });
+    const employeesInfo = await Employee.select({ emp_id: params.emp_id });
     const skills = _this.getSkills(params);
-    const promises = skills.map(async skill => {
-      const skillId = await Skills.insert(skill);
+    return Promise.mapSeries(skills, async skill => {
+      await Skills.insert({ name: skill });
+      const skillsInfo = await Skills.select({ name: skill });
       await EmployeeSkillsModel.create({
-        employee_id: employeeInfo.id,
-        skill_id: skillId
+        employee_id: employeesInfo[0].id,
+        skill_id: skillsInfo[0].id
       });
     });
-    await Promise.all(promises);
   }
 
+  //params: {emp_id: string}
   async select(params, _this) {
-    const employeeInfo = await Employee.select({ emp_id: params.emp_id });
-    const skillsInfo = await EmployeeSkillsModel.findAll({
-      where: { employee_id: employeeInfo.id }
+    const employeesInfo = await Employee.select({ emp_id: params.emp_id });
+    const skills = await EmployeeSkillsModel.findAll({
+      raw: true,
+      where: { employee_id: employeesInfo[0].id }
     });
-    const promises = skillsInfo.map(async skillInfo => {
-      return Skills.getSkillName(skillInfo.skill_id);
-    });
-    return Promise.all(promises).then(skills => {
-      return skills;
+    return Promise.mapSeries(skills, async skill => {
+      const skillInfo = await Skills.select({ id: skill.skill_id });
+      return skillInfo[0].name;
     });
   }
 
+  //params: {emp_id: string, skills: string[]}
   async delete(params, _this) {
     const employeeInfo = await Employee.select({ emp_id: params.emp_id });
     const skills = _this.getSkills(params);
     const promises = skills.map(async skillName => {
-      const skillId = await Skills.getSkillId(skillName);
+      const skillInfo = await Skills.select({ name: skillName });
       await EmployeeSkillsModel.destroy({
-        where: { employee_id: employeeInfo.id, skill_id: skillId }
+        where: { employee_id: employeeInfo[0].id, skill_id: skillInfo[0].id }
       });
     });
     return Promise.all(promises);
