@@ -23,8 +23,7 @@ class CompanyController {
   }
 
   async select(params) {
-    const results = await CompanyModel.findAll({ raw: true, where: params });
-    return results;
+    return CompanyModel.findAll({ raw: true, where: params });
   }
 
   async update(params) {
