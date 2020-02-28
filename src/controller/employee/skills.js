@@ -7,7 +7,7 @@ class Skills {
   }
 
   async select(params) {
-    return SkillsModel.findAll({ where: params });
+    return SkillsModel.findAll({ raw: true, where: params });
   }
 
   async delete(params) {
