@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const { Promise } = require('bluebird');
 
 const EmployeeSkills = require('../src/controller/employee/employee_skills');
-const { truncateTable } = require('./helpers');
+const { truncateTable, insertEmployee } = require('./helpers');
 const sequelize = require('../src/utils/connect_sequelize');
 const EmployeeSkillsModel = require('../src/models/employee_skills')(sequelize);
 const EmployeeModel = require('../src/models/employee')(sequelize);
@@ -168,22 +168,6 @@ describe('Employee skills Table', () => {
     });
   });
 });
-
-const insertEmployee = async employee => {
-  await EmployeeModel.create(employee);
-  const employees = await EmployeeModel.findAll({
-    raw: true,
-    where: { emp_id: employee.emp_id }
-  });
-  expect(employees).to.have.lengthOf(1);
-  const employeeInfo = employees[0];
-  expect(employeeInfo).to.have.property('emp_id', employee.emp_id);
-  expect(employeeInfo).to.have.property('name', employee.name);
-  expect(employeeInfo).to.have.property('email', employee.email);
-  expect(employeeInfo).to.have.property('address', employee.address);
-  expect(employeeInfo).to.have.property('phone_no', employee.phone_no);
-  return employeeInfo;
-};
 
 const insertEmployeeSkills = async (employeeId, skills) => {
   await Promise.mapSeries(skills, async skill => {
