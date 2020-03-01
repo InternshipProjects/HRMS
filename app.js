@@ -7,6 +7,7 @@ const swaggerUi = require('swagger-ui-express');
 
 const companyRoutes = require('./src/api/routes/company');
 const employeeRoutes = require('./src/api/routes/employee');
+const employeeSkillsRoutes = require('./src/api/routes/employee_skills');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
+app.use('/employee_skills', employeeSkillsRoutes);
 
 app.use((req, res, next) => {
   const error = new Error();
