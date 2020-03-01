@@ -2,22 +2,6 @@ const sequelize = require('../utils/connect_sequelize');
 const CompanyModel = require('../models/company')(sequelize);
 
 class CompanyController {
-  async handleQuery(queryInput) {
-    const { queryType, params } = queryInput;
-    const queries = {
-      POST: this.insert,
-      GET: this.select,
-      PATCH: this.update,
-      DELETE: this.delete
-    };
-    try {
-      return queries[queryType](params);
-    } catch (error) {
-      console.error(error);
-      throw `Invalid query type ${queryType}`;
-    }
-  }
-
   async insert(params) {
     await CompanyModel.create(params);
   }
