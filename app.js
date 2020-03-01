@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
+const companyRoutes = require('./src/api/routes/company');
+
 const swaggerOptions = {
   swaggerDefinition: {
     info: {
@@ -22,6 +24,8 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use(morgon('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.use('/company', companyRoutes);
 
 app.use((req, res, next) => {
   const error = new Error();
