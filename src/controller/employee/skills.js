@@ -11,7 +11,7 @@ class Skills {
         name: skillName
       }
     });
-    return skill;
+    return skill.dataValues;
   }
 
   async select(params) {

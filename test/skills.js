@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 
 const sequelize = require('../src/utils/connect_sequelize');
-const SkillsModel = require('../models/skills')(sequelize);
+const SkillsModel = require('../src/models/skills')(sequelize);
 const Skills = require('../src/controller/employee/skills');
 const { truncateTable } = require('./helpers');
 
@@ -19,23 +19,13 @@ describe('Skills Table', () => {
 
   describe('insert', () => {
     it('should insert skill1', async () => {
-      await Skills.insert(skill1);
-      const results = await SkillsModel.findAll({
-        raw: true,
-        where: { name: skill1.name }
-      });
-      expect(results).to.have.lengthOf(1);
-      expect(results[0]).to.have.property('name', skill1.name);
+      const results = await Skills.selectOrInsert(skill1);
+      expect(results).to.have.property('name', skill1.name.toLowerCase());
     });
 
     it('should insert skill2', async () => {
-      await Skills.insert(skill2);
-      const results = await SkillsModel.findAll({
-        raw: true,
-        where: { name: skill2.name }
-      });
-      expect(results).to.have.lengthOf(1);
-      expect(results[0]).to.have.property('name', skill2.name);
+      const results = await Skills.selectOrInsert(skill2);
+      expect(results).to.have.property('name', skill2.name.toLowerCase());
     });
   });
 
