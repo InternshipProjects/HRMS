@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 
 const sequelize = require('../src/utils/connect_sequelize');
-const ProjectModel = require('../models/project')(sequelize);
+const ProjectModel = require('../src/models/project')(sequelize);
 const Project = require('../src/controller/project/project');
 const { truncateTable } = require('./helpers');
 
