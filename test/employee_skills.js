@@ -5,7 +5,6 @@ const EmployeeSkills = require('../src/controller/employee/employee_skills');
 const { truncateTable, insertEmployee } = require('./helpers');
 const sequelize = require('../src/utils/connect_sequelize');
 const EmployeeSkillsModel = require('../src/models/employee_skills')(sequelize);
-const EmployeeModel = require('../src/models/employee')(sequelize);
 const SkillsModel = require('../src/models/skills')(sequelize);
 
 describe('Employee skills Table', () => {
@@ -36,9 +35,8 @@ describe('Employee skills Table', () => {
   describe('insert', () => {
     it('should insert employee1 with skills', async () => {
       const employeeInfo = await insertEmployee(employee1);
-      const skillsString = getSkillsString(employee1Skills);
       await EmployeeSkills.insert(
-        { emp_id: employee1.emp_id, skills: skillsString },
+        { emp_id: employee1.emp_id, skills: employee1Skills },
         EmployeeSkills
       );
 
@@ -56,18 +54,20 @@ describe('Employee skills Table', () => {
           where: { id: employeeSkill.skill_id }
         });
         expect(skillInfo).to.have.lengthOf(1);
-        expect(skillInfo[0]).to.have.property('name', employee1Skills[index]);
+        expect(skillInfo[0]).to.have.property(
+          'name',
+          employee1Skills[index].toLowerCase()
+        );
       });
       return Promise.all(promises);
     });
 
     it('should insert employee2 with skills', async () => {
       const employeeInfo = await insertEmployee(employee2);
-      const skillsString = getSkillsString(employee2Skills);
       await EmployeeSkills.insert(
         {
           emp_id: employee2.emp_id,
-          skills: skillsString
+          skills: employee2Skills
         },
         EmployeeSkills
       );
@@ -86,7 +86,10 @@ describe('Employee skills Table', () => {
           where: { id: employeeSkill.skill_id }
         });
         expect(skillInfo).to.have.lengthOf(1);
-        expect(skillInfo[0]).to.have.property('name', employee2Skills[index]);
+        expect(skillInfo[0]).to.have.property(
+          'name',
+          employee2Skills[index].toLowerCase()
+        );
       });
       return Promise.all(promises);
     });
@@ -143,7 +146,7 @@ describe('Employee skills Table', () => {
       await EmployeeSkills.delete(
         {
           emp_id: employee1.emp_id,
-          skills: getSkillsString(skillsForDelete)
+          skills: skillsForDelete
         },
         EmployeeSkills
       );
@@ -159,7 +162,7 @@ describe('Employee skills Table', () => {
       await EmployeeSkills.delete(
         {
           emp_id: employee2.emp_id,
-          skills: getSkillsString(skillsForDelete)
+          skills: skillsForDelete
         },
         EmployeeSkills
       );
@@ -208,8 +211,4 @@ const getEmployeeSkills = async employeeId => {
     []
   );
   return skillsRemaining;
-};
-
-const getSkillsString = skills => {
-  return '[' + skills.join(', ') + ']';
 };
