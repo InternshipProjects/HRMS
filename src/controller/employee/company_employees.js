@@ -1,33 +1,20 @@
 const sequelize = require('../../utils/connect_sequelize');
-const CompanyEmployeesModel = require('../../../models/company_employees')(
+const CompanyEmployeesModel = require('../../models/company_employees')(
   sequelize
 );
+const EmployeeModel = require('../../models/employee')(sequelize);
 const Employee = require('./employee');
 const Company = require('../company');
 
 class CompanyEmployees {
-  async query(queryType, params) {
-    const queries = {
-      POST: this.insert,
-      GET: this.select,
-      DELETE: this.delete
-    };
-    try {
-      return queries[queryType](params);
-    } catch (error) {
-      console.error(error);
-      throw `Invalid queryType ${queryType}`;
-    }
-  }
-
   async insert(params) {
     const employeeInfo = await Employee.select({ emp_id: params.emp_id });
     const companyInfo = await Company.select({
       registration_no: params.registration_no
     });
     await CompanyEmployeesModel.create({
-      employee_id: employeeInfo.id,
-      company_id: companyInfo.id
+      employee_id: employeeInfo[0].id,
+      company_id: companyInfo[0].id
     });
   }
 
@@ -35,10 +22,20 @@ class CompanyEmployees {
     const companyInfo = await Company.select({
       registration_no: params.registration_no
     });
-    const results = await CompanyEmployeesModel.findAll({
-      where: { company_id: companyInfo.id }
+    await CompanyEmployeesModel.belongsTo(EmployeeModel, {
+      foreignKey: 'employee_id'
     });
-    return results[0].dataValues;
+    return await CompanyEmployeesModel.findAll({
+      raw: true,
+      attributes: [],
+      where: { company_id: companyInfo[0].id },
+      include: [
+        {
+          model: EmployeeModel,
+          attributes: ['emp_id', 'name', 'email', 'address', 'phone_no']
+        }
+      ]
+    });
   }
 
   async delete(params) {
@@ -47,7 +44,7 @@ class CompanyEmployees {
       registration_no: params.registration_no
     });
     await CompanyEmployeesModel.destroy({
-      where: { employee_id: employeeInfo.id, company_id: companyInfo.id }
+      where: { employee_id: employeeInfo[0].id, company_id: companyInfo[0].id }
     });
   }
 }
