@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 
 const Employee = require('../src/controller/employee/employee');
 const sequelize = require('../src/utils/connect_sequelize');
-const EmployeeModel = require('../models/employee')(sequelize);
+const EmployeeModel = require('../src/models/employee')(sequelize);
 const { truncateTable } = require('./helpers');
 
 describe('Employee Table', () => {
