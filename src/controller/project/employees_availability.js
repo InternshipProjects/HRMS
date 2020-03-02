@@ -1,18 +1,7 @@
 const sequelize = require('../../utils/connect_sequelize');
 const { QueryTypes } = require('sequelize');
 
-class EmployeeAvailability {
-  async query(queryType, params) {
-    const queries = {
-      GET: this.select
-    };
-    try {
-      return queries[queryType](params);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
+class EmployeesAvailability {
   async select(params) {
     let query;
     if (params.date) {
@@ -23,11 +12,10 @@ class EmployeeAvailability {
       query = `select * from employee, project_allocation 
         where employee.id <> project_allocation.employee_id`;
     }
-    const results = await sequelize.query(query, {
+    return sequelize.query(query, {
       type: QueryTypes.SELECT
     });
-    return results;
   }
 }
 
-module.exports = new EmployeeAvailability();
+module.exports = new EmployeesAvailability();
