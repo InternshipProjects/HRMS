@@ -10,6 +10,7 @@ const employeeRoutes = require('./src/api/routes/employee');
 const employeeSkillsRoutes = require('./src/api/routes/employee_skills');
 const clientRoutes = require('./src/api/routes/client');
 const projectRoutes = require('./src/api/routes/project');
+const clientProjectsRoutes = require('./src/api/routes/client_projects');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -32,6 +33,7 @@ app.use(bodyParser.json());
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/employee_skills', employeeSkillsRoutes);
+app.use('/client_projects', clientProjectsRoutes);
 app.use('/client', clientRoutes);
 app.use('/project', projectRoutes);
 
