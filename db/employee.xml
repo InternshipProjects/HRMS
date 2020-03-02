@@ -70,6 +70,8 @@
 
         <addForeignKeyConstraint baseColumnNames="skill_id" baseTableName="employee_skills"
             constraintName="employee_skills_skill_id_fk" referencedColumnNames="id" referencedTableName="skills"/>
+        
+        <addUniqueConstraint columnNames="employee_id, skill_id" constraintName="Unique_employee_skill" tableName="employee_skills" />
     </changeSet>
 
     <changeSet id="company_employees" author="dhanalakshmi">
