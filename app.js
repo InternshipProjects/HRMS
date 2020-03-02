@@ -11,6 +11,7 @@ const employeeSkillsRoutes = require('./src/api/routes/employee_skills');
 const clientRoutes = require('./src/api/routes/client');
 const projectRoutes = require('./src/api/routes/project');
 const clientProjectsRoutes = require('./src/api/routes/client_projects');
+const allocateProjectRoutes = require('./src/api/routes/allocate_project');
 
 const swaggerOptions = {
   swaggerDefinition: {
@@ -36,6 +37,7 @@ app.use('/employee_skills', employeeSkillsRoutes);
 app.use('/client_projects', clientProjectsRoutes);
 app.use('/client', clientRoutes);
 app.use('/project', projectRoutes);
+app.use('/allocate_project', allocateProjectRoutes);
 
 app.use((req, res, next) => {
   const error = new Error();
