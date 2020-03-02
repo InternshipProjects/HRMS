@@ -13,7 +13,7 @@ router.post('/', async (req, res, next) => {
   try {
     await CompanyController.insert(company);
     return res.status(201).json({
-      message: 'Post request on company',
+      message: 'New company inserted',
       params: company
     });
   } catch (error) {
@@ -30,9 +30,9 @@ router.get('/', async (req, res, next) => {
   try {
     const company = await CompanyController.select(params);
     return res.status(200).json({
-      message: 'Get request on company',
+      message: 'Companies details',
       result: company,
-      params: params
+      params
     });
   } catch (error) {
     return res.status(400).json({
@@ -42,7 +42,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.patch('/', async (req, res, next) => {
-  const params = {
+  const company = {
     registration_no: req.body.registration_no,
     name: req.body.name,
     address: req.body.address,
@@ -50,10 +50,10 @@ router.patch('/', async (req, res, next) => {
     website: req.body.website
   };
   try {
-    await CompanyController.update(params);
+    await CompanyController.update(company);
     return res.status(200).json({
-      message: 'Patch request on company',
-      params: params
+      message: 'Company details updated',
+      params: company
     });
   } catch (error) {
     return res.status(400).json({
@@ -69,8 +69,8 @@ router.delete('/', async (req, res, next) => {
   try {
     await CompanyController.delete(params);
     return res.status(200).json({
-      message: 'Delete request on company',
-      params: params
+      message: 'Company deleted',
+      params
     });
   } catch (error) {
     return res.status(400).json({

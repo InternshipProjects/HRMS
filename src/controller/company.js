@@ -11,9 +11,8 @@ class CompanyController {
   }
 
   async update(params) {
-    let registrationNo = params['registration_no'];
     await CompanyModel.update(params, {
-      where: { registration_no: registrationNo }
+      where: { registration_no: params.registration_no }
     });
   }
 
