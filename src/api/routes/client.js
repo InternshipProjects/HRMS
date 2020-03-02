@@ -3,16 +3,16 @@ const router = express.Router();
 const ClientController = require('../../controller/client');
 
 router.post('/', async (req, res, next) => {
-  const params = {
+  const client = {
     name: req.body.name,
     website: req.body.website,
     country: req.body.country
   };
   try {
-    await ClientController.insert(params);
+    await ClientController.insert(client);
     return res.status(200).json({
-      message: 'Post method on client',
-      params: params
+      message: 'New client created',
+      params: client
     });
   } catch (error) {
     return res.status(400).json({
@@ -28,7 +28,7 @@ router.get('/', async (req, res, next) => {
   try {
     const client = await ClientController.select(params);
     return res.status(200).json({
-      message: 'Get method on client',
+      message: 'Clients details',
       result: client,
       params: params
     });
@@ -40,16 +40,16 @@ router.get('/', async (req, res, next) => {
 });
 
 router.patch('/', async (req, res, next) => {
-  const params = {
+  const client = {
     name: req.body.name,
     website: req.body.website,
     country: req.body.country
   };
   try {
-    await ClientController.update(params);
+    await ClientController.update(client);
     return res.status(200).json({
-      message: 'Patch method on client',
-      params: params
+      message: 'Client details updated',
+      params: client
     });
   } catch (error) {
     return res.status(400).json({
@@ -65,7 +65,7 @@ router.delete('/', async (req, res, next) => {
   try {
     await ClientController.delete(params);
     return res.status(200).json({
-      message: 'Delete method on client',
+      message: 'Client deleted',
       params: params
     });
   } catch (error) {
