@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const Company = require('../src/controller/company');
 const sequelize = require('../src/utils/connect_sequelize');
-const CompanyModel = require('../models/company')(sequelize);
+const CompanyModel = require('../src/models/company')(sequelize);
 const { truncateTable } = require('./helpers');
 
 describe('Company table', () => {
