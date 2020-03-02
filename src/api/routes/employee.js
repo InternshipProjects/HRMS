@@ -3,7 +3,7 @@ const router = express.Router();
 const EmployeeController = require('../../controller/employee/employee');
 
 router.post('/', async (req, res, next) => {
-  const params = {
+  const employee = {
     emp_id: req.body.emp_id,
     name: req.body.name,
     email: req.body.email,
@@ -11,10 +11,10 @@ router.post('/', async (req, res, next) => {
     phone_no: req.body.phone_no
   };
   try {
-    await EmployeeController.insert(params);
+    await EmployeeController.insert(employee);
     return res.status(200).json({
-      message: 'Post method on employee',
-      params: params
+      message: 'New employee created',
+      params: employee
     });
   } catch (error) {
     return res.status(400).json({
@@ -30,7 +30,7 @@ router.get('/', async (req, res, next) => {
   try {
     const employee = await EmployeeController.select(params);
     return res.status(200).json({
-      message: 'Get method on employee',
+      message: 'Employees details',
       result: employee,
       params: params
     });
@@ -42,7 +42,7 @@ router.get('/', async (req, res, next) => {
 });
 
 router.patch('/', async (req, res, next) => {
-  const params = {
+  const employee = {
     emp_id: req.body.emp_id,
     name: req.body.name,
     email: req.body.email,
@@ -50,10 +50,10 @@ router.patch('/', async (req, res, next) => {
     phone_no: req.body.phone_no
   };
   try {
-    await EmployeeController.update(params);
+    await EmployeeController.update(employee);
     return res.status(200).json({
-      message: 'Patch method on employee',
-      params: params
+      message: 'Updated employee details',
+      params: employee
     });
   } catch (error) {
     return res.status(400).json({
@@ -69,7 +69,7 @@ router.delete('/', async (req, res, next) => {
   try {
     await EmployeeController.delete(params);
     return res.status(200).json({
-      message: 'Delete method on employee',
+      message: 'Deleted employee',
       params: params
     });
   } catch (error) {
