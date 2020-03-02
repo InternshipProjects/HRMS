@@ -10,7 +10,7 @@ router.post('/', async (req, res, next) => {
   try {
     await ClientProjectController.insert(params);
     return res.status(200).json({
-      message: 'Post method on client_projects',
+      message: 'Project assigned to client',
       params
     });
   } catch (error) {
@@ -27,7 +27,7 @@ router.get('/', async (req, res, next) => {
   try {
     const projects = await ClientProjectController.select(params);
     return res.status(200).json({
-      message: 'Get method on client_projects',
+      message: "Client's projects",
       results: projects,
       params
     });
@@ -46,7 +46,7 @@ router.delete('/', async (req, res, next) => {
   try {
     await ClientProjectController.delete(params);
     return res.status(200).json({
-      message: 'Delete method on client_projects',
+      message: 'Client project deleted',
       params
     });
   } catch (error) {
