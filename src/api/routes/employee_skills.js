@@ -10,7 +10,7 @@ router.post('/', async (req, res, next) => {
   try {
     await EmployeeSkillsController.insert(params);
     return res.status(200).json({
-      message: 'Post method on employee_skills',
+      message: 'Skills are added for employee',
       params: params
     });
   } catch (error) {
@@ -27,7 +27,7 @@ router.get('/', async (req, res, next) => {
   try {
     const skills = await EmployeeSkillsController.select(params);
     return res.status(200).json({
-      message: 'Get method on employee_skills',
+      message: "Employee's skills",
       result: skills,
       params: params
     });
@@ -46,7 +46,7 @@ router.delete('/', async (req, res, next) => {
   try {
     await EmployeeSkillsController.delete(params);
     return res.status(200).json({
-      message: 'Delete method on employee_skills',
+      message: 'Skills deleted for employee',
       params: params
     });
   } catch (error) {

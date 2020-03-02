@@ -2,8 +2,16 @@ const sequelize = require('../../utils/connect_sequelize');
 const SkillsModel = require('../../models/skills')(sequelize);
 
 class Skills {
-  async insert(params) {
-    await SkillsModel.create(params);
+  async selectOrInsert(params) {
+    const skillName = params.name.toLowerCase();
+    const [skill, isCreated] = await SkillsModel.findOrCreate({
+      raw: true,
+      where: { name: skillName },
+      defaults: {
+        name: skillName
+      }
+    });
+    return skill;
   }
 
   async select(params) {

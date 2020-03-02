@@ -8,14 +8,21 @@ const Skills = require('./skills');
 class EmployeeSkills {
   // params - {emp_id: string, skills: string[]}
   async insert(params) {
-    const employeesInfo = await Employee.select({ emp_id: params.emp_id });
-    const skills = params.skills;
-    return Promise.mapSeries(skills, async skill => {
-      await Skills.insert({ name: skill });
-      const skillsInfo = await Skills.select({ name: skill });
-      await EmployeeSkillsModel.create({
-        employee_id: employeesInfo[0].id,
-        skill_id: skillsInfo[0].id
+    const employeeInfo = await Employee.select({ emp_id: params.emp_id });
+    return Promise.mapSeries(params.skills, async skill => {
+      const skillInfo = await Skills.selectOrInsert({
+        name: skill
+      });
+      await EmployeeSkillsModel.findOrCreate({
+        raw: true,
+        where: {
+          employee_id: employeeInfo[0].id,
+          skill_id: skillInfo.id
+        },
+        default: {
+          employee_id: employeeInfo[0].id,
+          skill_id: skillInfo.id
+        }
       });
     });
   }
@@ -36,8 +43,7 @@ class EmployeeSkills {
   //params: {emp_id: string, skills: string[]}
   async delete(params) {
     const employeeInfo = await Employee.select({ emp_id: params.emp_id });
-    const skills = params.skills;
-    const promises = skills.map(async skillName => {
+    const promises = params.skills.map(async skillName => {
       const skillInfo = await Skills.select({ name: skillName });
       await EmployeeSkillsModel.destroy({
         where: { employee_id: employeeInfo[0].id, skill_id: skillInfo[0].id }
