@@ -43,7 +43,11 @@ module.exports = sequelize => {
   const options = {
     tableName: "employee_skills",
     comment: "",
-    indexes: []
+    indexes: [{
+      name: "Unique_employee_skill",
+      unique: true,
+      fields: ["employee_id", "skill_id"]
+    }]
   };
   const EmployeeSkillsModel = sequelize.define("employee_skills_model", attributes, options);
   return EmployeeSkillsModel;
