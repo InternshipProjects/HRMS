@@ -6,7 +6,8 @@ const sequelize = new Sequelize(
   process.env.DB_PASSWORD,
   {
     dialect: process.env.DB_TYPE,
-    define: { timestamps: false }
+    define: { timestamps: false },
+    logging: false
   }
 );
 
