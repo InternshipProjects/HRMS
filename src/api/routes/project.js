@@ -3,16 +3,16 @@ const router = express.Router();
 const ProjectController = require('../../controller/project/project');
 
 router.post('/', async (req, res, next) => {
-  const params = {
+  const project = {
     name: req.body.name,
     start_date: req.body.start_date,
     end_date: req.body.end_date
   };
   try {
-    await ProjectController.insert(params);
+    await ProjectController.insert(project);
     return res.status(200).json({
-      message: 'Post method on project',
-      params: params
+      message: 'New project created',
+      params: project
     });
   } catch (error) {
     return res.status(400).json({
@@ -28,9 +28,9 @@ router.get('/', async (req, res, next) => {
   try {
     const project = await ProjectController.select(params);
     return res.status(200).json({
-      message: 'Get method on project',
+      message: 'Projects details',
       results: project,
-      params: params
+      params
     });
   } catch (error) {
     return res.status(400).json({
@@ -40,16 +40,16 @@ router.get('/', async (req, res, next) => {
 });
 
 router.patch('/', async (req, res, next) => {
-  const params = {
+  const project = {
     name: req.body.name,
     start_date: req.body.start_date,
     end_date: req.body.end_date
   };
   try {
-    await ProjectController.update(params);
+    await ProjectController.update(project);
     return res.status(200).json({
-      message: 'Patch method on project',
-      params
+      message: 'Project details updated',
+      params: project
     });
   } catch (error) {
     return res.status(400).json({
@@ -65,7 +65,7 @@ router.delete('/', async (req, res, next) => {
   try {
     await ProjectController.delete(params);
     return res.status(200).json({
-      message: 'Delete method on project',
+      message: 'Project deleted',
       params
     });
   } catch (error) {
