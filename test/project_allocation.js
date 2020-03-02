@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 
 const sequelize = require('../src/utils/connect_sequelize');
-const ProjectAllocationModel = require('../models/project_allocation')(
+const ProjectAllocationModel = require('../src/models/project_allocation')(
   sequelize
 );
 const ProjectAllocation = require('../src/controller/project/project_allocation');
@@ -296,10 +296,10 @@ describe('Project Allocation Table', () => {
         start_date: data.allocation[0].start_date,
         likely_end_date: data.allocation[0].likely_end_date
       });
-      const empIdsArrString = '[' + data.employees[0].emp_id + ']';
+      const empIds = [data.employees[0].emp_id];
       await ProjectAllocation.delete(
         {
-          emp_ids: empIdsArrString,
+          emp_ids: empIds,
           project_name: data.projects[0].name
         },
         ProjectAllocation
@@ -330,11 +330,10 @@ describe('Project Allocation Table', () => {
         likely_end_date: data.allocation[0].likely_end_date
       });
 
-      const empIdsArrString =
-        '[' + data.employees[0].emp_id + ', ' + data.employees[1].emp_id + ']';
+      const empIds = [data.employees[0].emp_id, data.employees[1].emp_id];
       await ProjectAllocation.delete(
         {
-          emp_ids: empIdsArrString,
+          emp_ids: empIds,
           project_name: data.projects[0].name
         },
         ProjectAllocation
