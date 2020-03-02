@@ -12,6 +12,6 @@ module.exports = {
   },
   options: {
     type: 'js',
-    dir: 'models'
+    dir: 'src/models'
   }
 };
