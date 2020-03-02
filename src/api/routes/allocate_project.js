@@ -12,7 +12,7 @@ router.post('/', async (req, res, next) => {
   try {
     await ProjectAllocationController.insert(params);
     return res.status(200).json({
-      message: 'Post method on allocate_project',
+      message: 'Employee allocated a project',
       params
     });
   } catch (error) {

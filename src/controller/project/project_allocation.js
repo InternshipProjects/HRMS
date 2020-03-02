@@ -20,7 +20,12 @@ class ProjectAllocation {
 
   // params: { emp_id?: string, project_name?: string }
   async select(params) {
-    if (params.emp_id) {
+    if (params.emp_id && params.project_name) {
+      return this.selectBasedOnEmpIdAndProjectName(
+        params.emp_id,
+        params.project_name
+      );
+    } else if (params.emp_id) {
       return this.selectBasedOnEmpId(params.emp_id);
     } else if (params.project_name) {
       return this.selectBasedOnProjectName(params.project_name);
@@ -64,28 +69,16 @@ class ProjectAllocation {
       params.emp_id,
       params.project_name
     );
+    let updateParams = {};
     if (params.start_date) {
-      await this.updateStartDate(allocationInfo[0].id, params.start_date);
-    } else if (params.likely_end_date) {
-      await this.updateLikelyEndDate(
-        allocationInfo[0].id,
-        params.likely_end_date
-      );
+      updateParams['start_date'] = params.start_date;
     }
-  }
-
-  async updateStartDate(id, startDate) {
-    await ProjectAllocationModel.update(
-      { start_date: startDate },
-      { where: { id: id } }
-    );
-  }
-
-  async updateLikelyEndDate(id, likelyEndDate) {
-    await ProjectAllocationModel.update(
-      { likely_end_date: likelyEndDate },
-      { where: { id: id } }
-    );
+    if (params.likely_end_date) {
+      updateParams['likely_end_date'] = params.likely_end_date;
+    }
+    await ProjectAllocationModel.update(updateParams, {
+      where: { id: allocationInfo[0].id }
+    });
   }
 
   //param: {emp_id: string[], project_name: string}
