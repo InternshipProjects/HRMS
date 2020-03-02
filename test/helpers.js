@@ -1,7 +1,7 @@
 const expect = require('chai').expect;
 const sequelize = require('../src/utils/connect_sequelize');
-const EmployeeModel = require('../models/employee')(sequelize);
-const ProjectModel = require('../models/project')(sequelize);
+const EmployeeModel = require('../src/models/employee')(sequelize);
+const ProjectModel = require('../src/models/project')(sequelize);
 
 const truncateTable = async tableName => {
   await sequelize.query(`truncate ${tableName} cascade`);
