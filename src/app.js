@@ -28,6 +28,7 @@ app.use('/employees_availability', employeesAvailabilityRoutes);
 app.use((req, res, next) => {
   const error = new Error();
   error.status = 404;
+  error.message = 'Route not found';
   next(error);
 });
 

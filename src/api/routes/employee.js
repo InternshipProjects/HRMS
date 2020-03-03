@@ -17,9 +17,8 @@ router.post('/', async (req, res, next) => {
       params: employee
     });
   } catch (error) {
-    return res.status(400).json({
-      error: error.message
-    });
+    error.status = 400;
+    next(error);
   }
 });
 
@@ -35,9 +34,8 @@ router.get('/', async (req, res, next) => {
       params: params
     });
   } catch (error) {
-    return res.status(400).json({
-      error: error.message
-    });
+    error.status = 400;
+    next(error);
   }
 });
 
@@ -56,9 +54,8 @@ router.patch('/', async (req, res, next) => {
       params: employee
     });
   } catch (error) {
-    return res.status(400).json({
-      error: error.message
-    });
+    error.status = 400;
+    next(error);
   }
 });
 
@@ -73,9 +70,8 @@ router.delete('/', async (req, res, next) => {
       params: params
     });
   } catch (error) {
-    return res.status(400).json({
-      error: error.message
-    });
+    error.status = 400;
+    next(error);
   }
 });
 
