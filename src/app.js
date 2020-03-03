@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const morgon = require('morgan');
 
+const userRoutes = require('./api/routes/user');
 const companyRoutes = require('./api/routes/company');
 const employeeRoutes = require('./api/routes/employee');
 const employeeSkillsRoutes = require('./api/routes/employee_skills');
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/user', userRoutes);
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/employee_skills', employeeSkillsRoutes);
