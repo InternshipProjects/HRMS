@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="user" author="dhanalakshmi">
+        <createTable tableName="user">
+            <column name="id" type="int">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone_no" type="varchar(10)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint constraintName="user_email"
+                             columnNames="email" tableName="user"/>
+        <addUniqueConstraint constraintName="user_phone_no" 
+                            columnNames="phone_no" tableName="user"/>
+        <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="flase" generationType="ALWAYS"
+            incrementBy="1" startWith="1" tableName="user"/>
+    </changeSet>
+</databaseChangeLog>

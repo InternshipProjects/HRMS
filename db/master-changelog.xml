@@ -9,4 +9,5 @@
     <include file="./db/employee.xml"/>
     <include file="./db/client.xml"/>
     <include file="./db/project.xml"/>
+    <include file="./db/user.xml"/>
 </databaseChangeLog>
