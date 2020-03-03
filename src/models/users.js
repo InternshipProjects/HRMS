@@ -53,10 +53,10 @@ module.exports = sequelize => {
     }
   };
   const options = {
-    tableName: "user",
+    tableName: "users",
     comment: "",
     indexes: []
   };
-  const UserModel = sequelize.define("user_model", attributes, options);
-  return UserModel;
+  const UsersModel = sequelize.define("users_model", attributes, options);
+  return UsersModel;
 };
