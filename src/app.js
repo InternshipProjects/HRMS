@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const morgon = require('morgan');
-const bodyParser = require('body-parser');
 
 const companyRoutes = require('./api/routes/company');
 const employeeRoutes = require('./api/routes/employee');
@@ -14,8 +13,7 @@ const allocateProjectRoutes = require('./api/routes/allocate_project');
 const employeesAvailabilityRoutes = require('./api/routes/employees_availability');
 
 app.use(morgon('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
