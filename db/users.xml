@@ -6,8 +6,8 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="user" author="dhanalakshmi">
-        <createTable tableName="user">
+    <changeSet id="users" author="dhanalakshmi">
+        <createTable tableName="users">
             <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -25,10 +25,10 @@
             </column>
         </createTable>
         <addUniqueConstraint constraintName="user_email"
-                             columnNames="email" tableName="user"/>
+                             columnNames="email" tableName="users"/>
         <addUniqueConstraint constraintName="user_phone_no" 
-                            columnNames="phone_no" tableName="user"/>
+                            columnNames="phone_no" tableName="users"/>
         <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="flase" generationType="ALWAYS"
-            incrementBy="1" startWith="1" tableName="user"/>
+            incrementBy="1" startWith="1" tableName="users"/>
     </changeSet>
 </databaseChangeLog>
