@@ -19,7 +19,7 @@ router.post('/', async (req, res, next) => {
   }
   try {
     if (await bcrypt.compare(user.password, dbUsers[0].password)) {
-      const accessToken = generateAccessToken(user);
+      const accessToken = JWTTokensController.generateAccessToken(user);
       const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
       await JWTTokensController.insert(refreshToken);
       return res.status(200).json({
@@ -36,9 +36,5 @@ router.post('/', async (req, res, next) => {
     return res.status(500).json({ error: error.message });
   }
 });
-
-const generateAccessToken = user => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-};
 
 module.exports = router;
