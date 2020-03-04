@@ -1,5 +1,5 @@
-const sequelize = require('../../utils/connect_sequelize');
-const EmployeeModel = require('../../models/employee')(sequelize);
+const sequelize = require('../utils/connect_sequelize');
+const EmployeeModel = require('../models/employee')(sequelize);
 
 class Employee {
   async insert(params) {
