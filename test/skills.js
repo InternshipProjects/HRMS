@@ -2,8 +2,8 @@ const expect = require('chai').expect;
 
 const sequelize = require('../src/utils/connect_sequelize');
 const SkillsModel = require('../src/models/skills')(sequelize);
-const Skills = require('../src/controller/employee/skills');
-const { truncateTable } = require('./helpers');
+const Skills = require('../src/controller/skills');
+const Helper = require('./helper');
 
 describe('Skills Table', () => {
   const skill1 = {
@@ -14,7 +14,7 @@ describe('Skills Table', () => {
   };
 
   beforeEach(async () => {
-    await truncateTable('skills');
+    await Helper.truncateTable('skills');
   });
 
   describe('insert', () => {
