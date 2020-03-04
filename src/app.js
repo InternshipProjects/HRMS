@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const userRoutes = require('./api/routes/user');
 const loginRoutes = require('./api/routes/login');
 const logoutRoutes = require('./api/routes/logout');
+const tokenRoutes = require('./api/routes/token');
 const companyRoutes = require('./api/routes/company');
 const employeeRoutes = require('./api/routes/employee');
 const employeeSkillsRoutes = require('./api/routes/employee_skills');
@@ -50,6 +51,7 @@ app.use('/login', loginRoutes);
 
 app.use(authenticate);
 app.use('/logout', logoutRoutes);
+app.use('/token', tokenRoutes);
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/employee_skills', employeeSkillsRoutes);
