@@ -11,10 +11,13 @@
             <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(50)">
+            <column name="user_name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar(150)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="varchar(50)">
@@ -24,10 +27,13 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addUniqueConstraint constraintName="user_email"
-                             columnNames="email" tableName="users"/>
-        <addUniqueConstraint constraintName="user_phone_no" 
-                            columnNames="phone_no" tableName="users"/>
+
+        <addUniqueConstraint constraintName="unique_user_name" columnNames="user_name" tableName="users"/>
+
+        <addUniqueConstraint constraintName="unique_user_email" columnNames="email" tableName="users"/>
+
+        <addUniqueConstraint constraintName="unique_user_phone_no" columnNames="phone_no" tableName="users"/>
+
         <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="flase" generationType="ALWAYS"
             incrementBy="1" startWith="1" tableName="users"/>
     </changeSet>

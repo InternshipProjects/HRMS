@@ -15,8 +15,9 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addUniqueConstraint constraintName="unique_token" 
-                            columnNames="refresh_token" tableName="jwt_tokens"/>
+
+        <addUniqueConstraint constraintName="unique_refresh_token" columnNames="refresh_token" tableName="jwt_tokens"/>
+
         <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="flase" generationType="ALWAYS"
             incrementBy="1" startWith="1" tableName="jwt_tokens"/>
     </changeSet>

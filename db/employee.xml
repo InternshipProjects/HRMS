@@ -27,8 +27,11 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addUniqueConstraint constraintName="employee_emp_id_unique" columnNames="emp_id" tableName="employee"/>
-        <addUniqueConstraint constraintName="employee_email_unique" columnNames="email" tableName="employee"/>
+        
+        <addUniqueConstraint constraintName="unique_employee_emp_id" columnNames="emp_id" tableName="employee"/>
+
+        <addUniqueConstraint constraintName="unique_employee_email" columnNames="email" tableName="employee"/>
+
         <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="false" generationType="ALWAYS"
             incrementBy="1" startWith="1" tableName="employee"/>
     </changeSet>  
@@ -43,7 +46,7 @@
             </column>
         </createTable>
 
-        <addUniqueConstraint constraintName="skill_name" columnNames="name" tableName="skills"/>
+        <addUniqueConstraint constraintName="unique_skill_name" columnNames="name" tableName="skills"/>
 
         <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="false" generationType="ALWAYS"
             incrementBy="1" startWith="1" tableName="skills"/>
@@ -66,12 +69,12 @@
             incrementBy="1" startWith="1" tableName="employee_skills"/>
 
         <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="employee_skills"
-            constraintName="employee_skills_emp_id_fk" referencedColumnNames="id" referencedTableName="employee"/>
+            constraintName="employee_id_fk" referencedColumnNames="id" referencedTableName="employee"/>
 
         <addForeignKeyConstraint baseColumnNames="skill_id" baseTableName="employee_skills"
-            constraintName="employee_skills_skill_id_fk" referencedColumnNames="id" referencedTableName="skills"/>
+            constraintName="skills_id_fk" referencedColumnNames="id" referencedTableName="skills"/>
         
-        <addUniqueConstraint columnNames="employee_id, skill_id" constraintName="Unique_employee_skill" tableName="employee_skills" />
+        <addUniqueConstraint columnNames="employee_id, skill_id" constraintName="unique_employee_skill" tableName="employee_skills" />
     </changeSet>
 
     <changeSet id="company_employees" author="dhanalakshmi">
