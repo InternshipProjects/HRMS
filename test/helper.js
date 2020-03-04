@@ -38,6 +38,20 @@ class Helper {
     return projectInfo;
   }
 
+  compareCompanyResults(results, company) {
+    expect(results).to.have.lengthOf(1);
+    const companyInfo = results[0];
+
+    expect(companyInfo).to.have.property('name', company.name);
+    expect(companyInfo).to.have.property('address', company.address);
+    expect(companyInfo).to.have.property(
+      'registration_no',
+      company.registration_no
+    );
+    expect(companyInfo).to.have.property('phone_no', company.phone_no);
+    expect(companyInfo).to.have.property('website', company.website);
+  }
+
   compareEmployeeResults(results, employee) {
     expect(results).to.have.lengthOf(1);
     const employeeInfo = results[0];

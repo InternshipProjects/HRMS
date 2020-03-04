@@ -4,25 +4,9 @@ const Company = require('../src/controller/company');
 const sequelize = require('../src/utils/connect_sequelize');
 const CompanyModel = require('../src/models/company')(sequelize);
 const Helper = require('./helper');
+const { companies } = require('./data');
 
 describe('Company table', () => {
-  const companies = [
-    {
-      name: 'everest engineering',
-      address: 'banglore',
-      registration_no: '10000',
-      phone_no: '1234567890',
-      website: 'everestengineering.com'
-    },
-    {
-      name: 'imnotout',
-      address: 'vizag',
-      registration_no: '10001',
-      phone_no: '0987654321',
-      website: 'imnotout.com'
-    }
-  ];
-
   beforeEach(async () => {
     await Helper.truncateTable('company');
   });
@@ -34,7 +18,7 @@ describe('Company table', () => {
         raw: true,
         where: { name: companies[0].name }
       });
-      compareCompanyResults(results, companies[0]);
+      Helper.compareCompanyResults(results, companies[0]);
     });
 
     it('should insert company2', async () => {
@@ -43,7 +27,7 @@ describe('Company table', () => {
         raw: true,
         where: { name: companies[1].name }
       });
-      compareCompanyResults(results, companies[1]);
+      Helper.compareCompanyResults(results, companies[1]);
     });
   });
 
@@ -51,13 +35,13 @@ describe('Company table', () => {
     it('should select company1 details', async () => {
       await CompanyModel.create(companies[0]);
       const results = await Company.select({ name: companies[0].name });
-      compareCompanyResults(results, companies[0]);
+      Helper.compareCompanyResults(results, companies[0]);
     });
 
     it('should select company2 details', async () => {
       await CompanyModel.create(companies[1]);
       const results = await Company.select({ name: companies[1].name });
-      compareCompanyResults(results, companies[1]);
+      Helper.compareCompanyResults(results, companies[1]);
     });
   });
 
@@ -79,7 +63,7 @@ describe('Company table', () => {
       const updatedCompanyDetails = Object.assign(companies[0], {});
       updatedCompanyDetails.name = comapanyNewName;
 
-      compareCompanyResults(results, updatedCompanyDetails);
+      Helper.compareCompanyResults(results, updatedCompanyDetails);
     });
 
     it('should update company2 details', async () => {
@@ -99,7 +83,7 @@ describe('Company table', () => {
       const updatedCompanyDetails = Object.assign(companies[1], {});
       updatedCompanyDetails.name = comapanyNewName;
 
-      compareCompanyResults(results, updatedCompanyDetails);
+      Helper.compareCompanyResults(results, updatedCompanyDetails);
     });
   });
 
@@ -124,18 +108,4 @@ describe('Company table', () => {
       expect(results).to.be.empty;
     });
   });
-
-  const compareCompanyResults = (results, company) => {
-    expect(results).to.have.lengthOf(1);
-    const companyInfo = results[0];
-
-    expect(companyInfo).to.have.property('name', company.name);
-    expect(companyInfo).to.have.property('address', company.address);
-    expect(companyInfo).to.have.property(
-      'registration_no',
-      company.registration_no
-    );
-    expect(companyInfo).to.have.property('phone_no', company.phone_no);
-    expect(companyInfo).to.have.property('website', company.website);
-  };
 });
