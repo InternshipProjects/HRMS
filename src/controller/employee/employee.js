@@ -12,7 +12,7 @@ class Employee {
 
   async update(params) {
     await EmployeeModel.update(params, {
-      where: { emp_id: params['emp_id'] }
+      where: { emp_id: params.emp_id }
     });
   }
 
