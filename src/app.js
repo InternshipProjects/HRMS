@@ -31,9 +31,22 @@ app.use((req, res, next) => {
   }
   next();
 });
+//Authentication
+const authenticate = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) return res.sendStatus(401);
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
 
 app.use('/user', userRoutes);
 app.use('/login', loginRoutes);
+
+app.use(authenticate);
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/employee_skills', employeeSkillsRoutes);
