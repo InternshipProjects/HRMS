@@ -30,7 +30,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "website",
       autoIncrement: false,
-      unique: "client_website_name"
+      unique: "unique_client_website_name"
     },
     country: {
       type: DataTypes.CHAR(50),

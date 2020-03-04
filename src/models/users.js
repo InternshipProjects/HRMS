@@ -13,14 +13,15 @@ module.exports = sequelize => {
       field: "id",
       autoIncrement: true
     },
-    name: {
+    user_name: {
       type: DataTypes.CHAR(50),
       allowNull: false,
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "name",
-      autoIncrement: false
+      field: "user_name",
+      autoIncrement: false,
+      unique: "unique_user_name"
     },
     password: {
       type: DataTypes.CHAR(150),
@@ -31,6 +32,15 @@ module.exports = sequelize => {
       field: "password",
       autoIncrement: false
     },
+    name: {
+      type: DataTypes.CHAR(50),
+      allowNull: false,
+      defaultValue: null,
+      comment: null,
+      primaryKey: false,
+      field: "name",
+      autoIncrement: false
+    },
     email: {
       type: DataTypes.CHAR(50),
       allowNull: false,
@@ -39,7 +49,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "email",
       autoIncrement: false,
-      unique: "user_email"
+      unique: "unique_user_email"
     },
     phone_no: {
       type: DataTypes.CHAR(10),
@@ -49,7 +59,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "phone_no",
       autoIncrement: false,
-      unique: "user_phone_no"
+      unique: "unique_user_phone_no"
     }
   };
   const options = {

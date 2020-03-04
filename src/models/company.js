@@ -13,6 +13,16 @@ module.exports = sequelize => {
       field: "id",
       autoIncrement: true
     },
+    registration_no: {
+      type: DataTypes.CHAR(50),
+      allowNull: false,
+      defaultValue: null,
+      comment: null,
+      primaryKey: false,
+      field: "registration_no",
+      autoIncrement: false,
+      unique: "unique_company_registration_no"
+    },
     name: {
       type: DataTypes.CHAR(50),
       allowNull: false,
@@ -30,16 +40,6 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "address",
       autoIncrement: false
-    },
-    registration_no: {
-      type: DataTypes.CHAR(50),
-      allowNull: false,
-      defaultValue: null,
-      comment: null,
-      primaryKey: false,
-      field: "registration_no",
-      autoIncrement: false,
-      unique: "regiestration_no_unique"
     },
     phone_no: {
       type: DataTypes.CHAR(10),

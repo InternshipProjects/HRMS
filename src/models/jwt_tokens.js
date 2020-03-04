@@ -21,7 +21,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "refresh_token",
       autoIncrement: false,
-      unique: "unique_token"
+      unique: "unique_refresh_token"
     }
   };
   const options = {

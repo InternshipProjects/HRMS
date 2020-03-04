@@ -44,7 +44,7 @@ module.exports = sequelize => {
     tableName: "employee_skills",
     comment: "",
     indexes: [{
-      name: "Unique_employee_skill",
+      name: "unique_employee_skill",
       unique: true,
       fields: ["employee_id", "skill_id"]
     }]

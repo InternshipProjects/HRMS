@@ -21,7 +21,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "name",
       autoIncrement: false,
-      unique: "skill_name"
+      unique: "unique_skill_name"
     }
   };
   const options = {

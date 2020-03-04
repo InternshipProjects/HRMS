@@ -21,7 +21,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "emp_id",
       autoIncrement: false,
-      unique: "employee_emp_id_unique"
+      unique: "unique_employee_emp_id"
     },
     name: {
       type: DataTypes.CHAR(50),
@@ -40,7 +40,7 @@ module.exports = sequelize => {
       primaryKey: false,
       field: "email",
       autoIncrement: false,
-      unique: "employee_email_unique"
+      unique: "unique_employee_email"
     },
     address: {
       type: DataTypes.CHAR(50),
