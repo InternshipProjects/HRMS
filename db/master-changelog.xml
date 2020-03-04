@@ -10,4 +10,5 @@
     <include file="./db/client.xml"/>
     <include file="./db/project.xml"/>
     <include file="./db/users.xml"/>
+    <include file="./db/refreshTokens.xml"/>
 </databaseChangeLog>
