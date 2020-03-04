@@ -4,8 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const UserController = require('../../controller/user');
-
-let refreshTokens = [];
+const JWTTokensController = require('../../controller/jwt_tokens');
 
 router.post('/', async (req, res, next) => {
   const user = {
@@ -22,7 +21,7 @@ router.post('/', async (req, res, next) => {
     if (await bcrypt.compare(user.password, dbUsers[0].password)) {
       const accessToken = generateAccessToken(user);
       const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
-      refreshTokens.push(refreshToken);
+      await JWTTokensController.insert(refreshToken);
       return res.status(200).json({
         message: 'Successfully logged in',
         accessToken,
