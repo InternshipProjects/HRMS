@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const userRoutes = require('./api/routes/user');
 const loginRoutes = require('./api/routes/login');
+const logoutRoutes = require('./api/routes/logout');
 const companyRoutes = require('./api/routes/company');
 const employeeRoutes = require('./api/routes/employee');
 const employeeSkillsRoutes = require('./api/routes/employee_skills');
@@ -31,6 +32,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+
 //Authentication
 const authenticate = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -47,6 +49,7 @@ app.use('/user', userRoutes);
 app.use('/login', loginRoutes);
 
 app.use(authenticate);
+app.use('/logout', logoutRoutes);
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/employee_skills', employeeSkillsRoutes);
