@@ -13,22 +13,22 @@ module.exports = sequelize => {
       field: "id",
       autoIncrement: true
     },
-    token: {
+    refresh_token: {
       type: DataTypes.CHAR(200),
       allowNull: false,
       defaultValue: null,
       comment: null,
       primaryKey: false,
-      field: "token",
+      field: "refresh_token",
       autoIncrement: false,
       unique: "unique_token"
     }
   };
   const options = {
-    tableName: "refresh_tokens",
+    tableName: "jwt_tokens",
     comment: "",
     indexes: []
   };
-  const RefreshTokensModel = sequelize.define("refresh_tokens_model", attributes, options);
-  return RefreshTokensModel;
+  const JwtTokensModel = sequelize.define("jwt_tokens_model", attributes, options);
+  return JwtTokensModel;
 };
