@@ -6,18 +6,18 @@
   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="refreshTokens" author="dhanalakshmi">
-        <createTable tableName="refresh_tokens">
+    <changeSet id="jwtTokens" author="dhanalakshmi">
+        <createTable tableName="jwt_tokens">
             <column name="id" type="int">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="token" type="varchar(200)">
+            <column name="refresh_token" type="varchar(200)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
         <addUniqueConstraint constraintName="unique_token" 
-                            columnNames="token" tableName="refresh_tokens"/>
+                            columnNames="refresh_token" tableName="jwt_tokens"/>
         <addAutoIncrement columnDataType="int" columnName="id" defaultOnNull="flase" generationType="ALWAYS"
-            incrementBy="1" startWith="1" tableName="refresh_tokens"/>
+            incrementBy="1" startWith="1" tableName="jwt_tokens"/>
     </changeSet>
 </databaseChangeLog>
