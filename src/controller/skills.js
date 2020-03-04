@@ -1,5 +1,5 @@
-const sequelize = require('../../utils/connect_sequelize');
-const SkillsModel = require('../../models/skills')(sequelize);
+const sequelize = require('../utils/connect_sequelize');
+const SkillsModel = require('../models/skills')(sequelize);
 
 class Skills {
   async selectOrInsert(params) {
