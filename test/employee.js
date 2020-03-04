@@ -4,25 +4,9 @@ const Employee = require('../src/controller/employee');
 const sequelize = require('../src/utils/connect_sequelize');
 const EmployeeModel = require('../src/models/employee')(sequelize);
 const Helper = require('./helper');
+const { employees } = require('./data');
 
 describe('Employee Table', () => {
-  const employees = [
-    {
-      emp_id: '100',
-      name: 'dhanalakshmi narala',
-      email: 'dhanalakshmi.narala@gmail.com',
-      address: 'brahmapuri',
-      phone_no: '1234567890'
-    },
-    {
-      emp_id: '101',
-      name: 'sailu k',
-      email: 'sailu@gmail.com',
-      address: 'amalapuram',
-      phone_no: '0987654321'
-    }
-  ];
-
   beforeEach(async () => {
     await Helper.truncateTable('employee');
   });
@@ -33,7 +17,7 @@ describe('Employee Table', () => {
       const results = await EmployeeModel.findAll({
         where: { emp_id: employees[0].emp_id }
       });
-      compareEmployeeResults(results, employees[0]);
+      Helper.compareEmployeeResults(results, employees[0]);
     });
 
     it('should insert employee2', async () => {
@@ -41,7 +25,7 @@ describe('Employee Table', () => {
       const results = await EmployeeModel.findAll({
         where: { emp_id: employees[1].emp_id }
       });
-      compareEmployeeResults(results, employees[1]);
+      Helper.compareEmployeeResults(results, employees[1]);
     });
   });
 
@@ -49,13 +33,13 @@ describe('Employee Table', () => {
     it('should select employee1 details', async () => {
       await EmployeeModel.create(employees[0]);
       const results = await Employee.select({ emp_id: employees[0].emp_id });
-      compareEmployeeResults(results, employees[0]);
+      Helper.compareEmployeeResults(results, employees[0]);
     });
 
     it('should select employee2 details', async () => {
       await EmployeeModel.create(employees[1]);
       const results = await Employee.select({ emp_id: employees[1].emp_id });
-      compareEmployeeResults(results, employees[1]);
+      Helper.compareEmployeeResults(results, employees[1]);
     });
   });
 
@@ -76,7 +60,7 @@ describe('Employee Table', () => {
       const updateEmployeeDetails = Object.assign(employees[0], {});
       updateEmployeeDetails.name = employeeNewName;
 
-      compareEmployeeResults(results, updateEmployeeDetails);
+      Helper.compareEmployeeResults(results, updateEmployeeDetails);
     });
 
     it('should update employee2 details', async () => {
@@ -95,7 +79,7 @@ describe('Employee Table', () => {
       const updateEmployeeDetails = Object.assign(employees[1], {});
       updateEmployeeDetails.name = employeeNewName;
 
-      compareEmployeeResults(results, updateEmployeeDetails);
+      Helper.compareEmployeeResults(results, updateEmployeeDetails);
     });
   });
 
@@ -120,15 +104,4 @@ describe('Employee Table', () => {
       expect(results).to.have.lengthOf(0);
     });
   });
-
-  const compareEmployeeResults = (results, employee) => {
-    expect(results).to.have.lengthOf(1);
-    const employeeInfo = results[0];
-
-    expect(employeeInfo).to.have.property('emp_id', employee.emp_id);
-    expect(employeeInfo).to.have.property('name', employee.name);
-    expect(employeeInfo).to.have.property('email', employee.email);
-    expect(employeeInfo).to.have.property('address', employee.address);
-    expect(employeeInfo).to.have.property('phone_no', employee.phone_no);
-  };
 });
