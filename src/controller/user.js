@@ -13,7 +13,7 @@ class User {
   }
 
   async update(params) {
-    await UsersModel.update(params, { where: { name: params.name } });
+    await UsersModel.update(params, { where: { user_name: params.user_name } });
   }
 
   async delete(params) {
