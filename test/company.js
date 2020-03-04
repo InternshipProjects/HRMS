@@ -1,170 +1,141 @@
 const expect = require('chai').expect;
+
 const Company = require('../src/controller/company');
 const sequelize = require('../src/utils/connect_sequelize');
 const CompanyModel = require('../src/models/company')(sequelize);
-const { truncateTable } = require('./helpers');
+const Helper = require('./helper');
 
 describe('Company table', () => {
-  const company1 = {
-    name: 'everest engineering',
-    address: 'banglore',
-    registration_no: '10000',
-    phone_no: '1234567890',
-    website: 'everestengineering.com'
-  };
-  const company2 = {
-    name: 'imnotout',
-    address: 'vizag',
-    registration_no: '10001',
-    phone_no: '0987654321',
-    website: 'imnotout.com'
-  };
+  const companies = [
+    {
+      name: 'everest engineering',
+      address: 'banglore',
+      registration_no: '10000',
+      phone_no: '1234567890',
+      website: 'everestengineering.com'
+    },
+    {
+      name: 'imnotout',
+      address: 'vizag',
+      registration_no: '10001',
+      phone_no: '0987654321',
+      website: 'imnotout.com'
+    }
+  ];
 
   beforeEach(async () => {
-    await truncateTable('company');
+    await Helper.truncateTable('company');
   });
 
   describe('insert', () => {
     it('should insert company1', async () => {
-      await Company.insert(company1);
+      await Company.insert(companies[0]);
       const results = await CompanyModel.findAll({
         raw: true,
-        where: { name: company1.name }
+        where: { name: companies[0].name }
       });
-      expect(results).to.have.lengthOf(1);
-
-      const companyInfo = results[0];
-      expect(companyInfo).to.have.property('name', company1.name);
-      expect(companyInfo).to.have.property('address', company1.address);
-      expect(companyInfo).to.have.property(
-        'registration_no',
-        company1.registration_no
-      );
-      expect(companyInfo).to.have.property('phone_no', company1.phone_no);
-      expect(companyInfo).to.have.property('website', company1.website);
+      compareCompanyResults(results, companies[0]);
     });
 
     it('should insert company2', async () => {
-      await Company.insert(company2);
+      await Company.insert(companies[1]);
       const results = await CompanyModel.findAll({
         raw: true,
-        where: { name: company2.name }
+        where: { name: companies[1].name }
       });
-      expect(results).to.have.lengthOf(1);
-
-      const companyInfo = results[0];
-      expect(companyInfo).to.have.property('name', company2.name);
-      expect(companyInfo).to.have.property('address', company2.address);
-      expect(companyInfo).to.have.property(
-        'registration_no',
-        company2.registration_no
-      );
-      expect(companyInfo).to.have.property('phone_no', company2.phone_no);
-      expect(companyInfo).to.have.property('website', company2.website);
+      compareCompanyResults(results, companies[1]);
     });
   });
 
   describe('select', () => {
     it('should select company1 details', async () => {
-      await CompanyModel.create(company1);
-      const results = await Company.select({ name: company1.name });
-      expect(results).to.have.lengthOf(1);
-      const companyInfo = results[0];
-      expect(companyInfo).to.have.property('name', company1.name);
-      expect(companyInfo).to.have.property('address', company1.address);
-      expect(companyInfo).to.have.property(
-        'registration_no',
-        company1.registration_no
-      );
-      expect(companyInfo).to.have.property('phone_no', company1.phone_no);
-      expect(companyInfo).to.have.property('website', company1.website);
+      await CompanyModel.create(companies[0]);
+      const results = await Company.select({ name: companies[0].name });
+      compareCompanyResults(results, companies[0]);
     });
 
     it('should select company2 details', async () => {
-      await CompanyModel.create(company2);
-      const results = await Company.select({ name: company2.name });
-      expect(results).to.have.lengthOf(1);
-      const companyInfo = results[0];
-      expect(companyInfo).to.have.property('name', company2.name);
-      expect(companyInfo).to.have.property('address', company2.address);
-      expect(companyInfo).to.have.property(
-        'registration_no',
-        company2.registration_no
-      );
-      expect(companyInfo).to.have.property('phone_no', company2.phone_no);
-      expect(companyInfo).to.have.property('website', company2.website);
+      await CompanyModel.create(companies[1]);
+      const results = await Company.select({ name: companies[1].name });
+      compareCompanyResults(results, companies[1]);
     });
   });
 
   describe('update', () => {
     it('should update company1 details', async () => {
-      await CompanyModel.create(company1);
+      await CompanyModel.create(companies[0]);
+
       const comapanyNewName = 'Everest';
       await Company.update({
         name: comapanyNewName,
-        registration_no: company1.registration_no
+        registration_no: companies[0].registration_no
       });
+
       const results = await CompanyModel.findAll({
         raw: true,
-        where: { registration_no: company1.registration_no }
+        where: { registration_no: companies[0].registration_no }
       });
-      expect(results).to.have.lengthOf(1);
 
-      const companyInfo = results[0];
-      expect(companyInfo).to.have.property('name', comapanyNewName);
-      expect(companyInfo).to.have.property('address', company1.address);
-      expect(companyInfo).to.have.property(
-        'registration_no',
-        company1.registration_no
-      );
-      expect(companyInfo).to.have.property('phone_no', company1.phone_no);
-      expect(companyInfo).to.have.property('website', company1.website);
+      const updatedCompanyDetails = Object.assign(companies[0], {});
+      updatedCompanyDetails.name = comapanyNewName;
+
+      compareCompanyResults(results, updatedCompanyDetails);
     });
 
     it('should update company2 details', async () => {
-      await CompanyModel.create(company2);
+      await CompanyModel.create(companies[1]);
+
       const comapanyNewName = 'Iamnotout';
       await Company.update({
         name: comapanyNewName,
-        registration_no: company2.registration_no
+        registration_no: companies[1].registration_no
       });
+
       const results = await CompanyModel.findAll({
         raw: true,
-        where: { registration_no: company2.registration_no }
+        where: { registration_no: companies[1].registration_no }
       });
-      expect(results).to.have.lengthOf(1);
 
-      const companyInfo = results[0];
-      expect(companyInfo).to.have.property('name', comapanyNewName);
-      expect(companyInfo).to.have.property('address', company2.address);
-      expect(companyInfo).to.have.property(
-        'registration_no',
-        company2.registration_no
-      );
-      expect(companyInfo).to.have.property('phone_no', company2.phone_no);
-      expect(companyInfo).to.have.property('website', company2.website);
+      const updatedCompanyDetails = Object.assign(companies[1], {});
+      updatedCompanyDetails.name = comapanyNewName;
+
+      compareCompanyResults(results, updatedCompanyDetails);
     });
   });
 
   describe('delete', () => {
     it('delete company1', async () => {
-      await CompanyModel.create(company1);
-      await Company.delete({ registration_no: company1.registration_no });
+      await CompanyModel.create(companies[0]);
+      await Company.delete({ registration_no: companies[0].registration_no });
       const results = await CompanyModel.findAll({
         raw: true,
-        where: { registration_no: company1.registration_no }
+        where: { registration_no: companies[0].registration_no }
       });
       expect(results).to.be.empty;
     });
 
     it('delete company2', async () => {
-      await CompanyModel.create(company2);
-      await Company.delete({ registration_no: company2.registration_no });
+      await CompanyModel.create(companies[1]);
+      await Company.delete({ registration_no: companies[1].registration_no });
       const results = await CompanyModel.findAll({
         raw: true,
-        where: { registration_no: company2.registration_no }
+        where: { registration_no: companies[1].registration_no }
       });
       expect(results).to.be.empty;
     });
   });
+
+  const compareCompanyResults = (results, company) => {
+    expect(results).to.have.lengthOf(1);
+    const companyInfo = results[0];
+
+    expect(companyInfo).to.have.property('name', company.name);
+    expect(companyInfo).to.have.property('address', company.address);
+    expect(companyInfo).to.have.property(
+      'registration_no',
+      company.registration_no
+    );
+    expect(companyInfo).to.have.property('phone_no', company.phone_no);
+    expect(companyInfo).to.have.property('website', company.website);
+  };
 });
