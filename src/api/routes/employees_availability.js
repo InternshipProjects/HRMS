@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const EmployeeAvailabilityController = require('../../controller/project/employees_availability');
+const EmployeeAvailabilityController = require('../../controller/employees_availability');
 
 router.get('/', async (req, res, next) => {
   const params = {

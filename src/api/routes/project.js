@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ProjectController = require('../../controller/project/project');
+const ProjectController = require('../../controller/project');
 
 router.post('/', async (req, res, next) => {
   const project = {

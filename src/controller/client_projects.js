@@ -1,6 +1,6 @@
-const Client = require('../client');
+const Client = require('./client');
 const Project = require('./project');
-const sequelize = require('../../utils/connect_sequelize');
+const sequelize = require('../utils/connect_sequelize');
 const { QueryTypes } = require('sequelize');
 
 class ClientProjects {

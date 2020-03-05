@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const ProjectAllocationController = require('../../controller/project/project_allocation');
+const ProjectAllocationController = require('../../controller/project_allocation');
 
 router.post('/', async (req, res, next) => {
   const params = {

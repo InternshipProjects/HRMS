@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const EmployeeController = require('../../controller/employee/employee');
+const EmployeeController = require('../../controller/employee');
 
 router.post('/', async (req, res, next) => {
   const employee = {

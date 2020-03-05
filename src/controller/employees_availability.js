@@ -1,4 +1,4 @@
-const sequelize = require('../../utils/connect_sequelize');
+const sequelize = require('../utils/connect_sequelize');
 const { QueryTypes } = require('sequelize');
 
 class EmployeesAvailability {
