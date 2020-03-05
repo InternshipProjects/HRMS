@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const morgon = require('morgan');
 const jwt = require('jsonwebtoken');
+const log = require('loglevel');
 
 const userRoutes = require('./api/routes/user');
 const loginRoutes = require('./api/routes/login');
@@ -19,6 +20,11 @@ const employeesAvailabilityRoutes = require('./api/routes/employees_availability
 
 app.use(morgon('dev'));
 app.use(express.json());
+
+app.use((req, res, next) => {
+  log.trace(`\n\nRequest: ${req}`);
+  next();
+});
 
 // Handling CORS errors
 app.use((req, res, next) => {
@@ -70,6 +76,8 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
+  log.error(`\n\nError Message: ${error.message}`);
+  log.error(`Status code: ${error.status}`);
   res.status(error.status || 500);
   res.json({
     error: {
