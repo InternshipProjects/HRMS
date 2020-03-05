@@ -32,4 +32,30 @@ const employees = [
   }
 ];
 
-module.exports = { companies, employees };
+const projects = [
+  {
+    name: 'todos',
+    start_date: '2020-02-27',
+    end_date: '2020-03-27'
+  },
+  {
+    name: 'tic-toc-toe',
+    start_date: '2020-04-01',
+    end_date: '2020-05-01'
+  }
+];
+
+const clients = [
+  {
+    name: 'dell',
+    website: 'dell.com',
+    country: 'india'
+  },
+  {
+    name: 'samsung',
+    website: 'hp.com',
+    country: 'south korea'
+  }
+];
+
+module.exports = { companies, employees, projects, clients };
