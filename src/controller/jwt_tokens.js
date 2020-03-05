@@ -1,11 +1,17 @@
+const jwt = require('jsonwebtoken');
+
 const sequelize = require('../utils/connect_sequelize');
 const JWTTokensModel = require('../models/jwt_tokens')(sequelize);
 
 class JWTTokens {
-  async generateAccessToken(user) {
+  generateAccessToken(user) {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: '24h'
     });
+  }
+
+  generateRefreshToken(user) {
+    return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET);
   }
 
   async insert(token) {
