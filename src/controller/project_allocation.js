@@ -1,8 +1,8 @@
-const sequelize = require('../../utils/connect_sequelize');
-const ProjectAllocationModel = require('../../models/project_allocation')(
+const sequelize = require('../utils/connect_sequelize');
+const ProjectAllocationModel = require('../models/project_allocation')(
   sequelize
 );
-const Employee = require('../employee/employee');
+const Employee = require('./employee');
 const Project = require('./project');
 
 class ProjectAllocation {
