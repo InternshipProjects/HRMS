@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const JWTTokensController = require('../../controller/jwt_tokens');
 
-router.get('/', async (req, res, next) => {
+router.post('/', async (req, res, next) => {
   const refreshToken = req.body.token;
   if (!refreshToken) {
     return res.status(401).json({ message: 'Refresh token is required' });
@@ -19,7 +19,9 @@ router.get('/', async (req, res, next) => {
       return res.status(403).json({ message: 'Invalid refresh token' });
     }
 
+    console.log('user: ', user);
     const accessToken = JWTTokensController.generateAccessToken({
+      id: user.id,
       name: user.name
     });
     return res.status(200).json({ accessToken });
