@@ -1,10 +1,15 @@
 const expect = require('chai').expect;
 const bcrypt = require('bcrypt');
 
-const User = require('../src/controller/user');
+const {
+  insertUserInDB,
+  getUserFromDB,
+  updateUserInDB,
+  deleteUserFromDB
+} = require('../src/services/user');
 const sequelize = require('../src/utils/connect_sequelize');
 const UserModel = require('../src/models/users')(sequelize);
-const Helper = require('./helper');
+const { truncateTable } = require('./helper');
 
 describe('User Table', () => {
   const users = [
@@ -25,40 +30,46 @@ describe('User Table', () => {
   ];
 
   beforeEach(async () => {
-    await Helper.truncateTable('users');
+    await truncateTable('users');
   });
 
   describe('insert', () => {
     it('should insert user1', async () => {
-      await User.insert(users[0]);
+      const isInserted = await insertUserInDB(users[0]);
+      expect(isInserted).to.be.true;
+
       const results = await UserModel.findAll({
         raw: true,
         where: { user_name: users[0].user_name }
       });
-      await compareUserDeatils(results, users[0]);
+      expect(results).to.have.lengthOf(1);
+      await compareUserInfo(results[0], users[0]);
     });
 
     it('should insert user2', async () => {
-      await User.insert(users[1]);
+      const isInserted = await insertUserInDB(users[1]);
+      expect(isInserted).to.be.true;
+
       const results = await UserModel.findAll({
         raw: true,
         where: { user_name: users[1].user_name }
       });
-      await compareUserDeatils(results, users[1]);
+      expect(results).to.have.lengthOf(1);
+      await compareUserInfo(results[0], users[1]);
     });
   });
 
   describe('select', () => {
     it('should select user1 details', async () => {
       await UserModel.create(users[0]);
-      const results = await User.select({ user_name: users[0].user_name });
-      await compareUserDeatils(results, users[0]);
+      const results = await getUserFromDB({ user_name: users[0].user_name });
+      await compareUserInfo(results, users[0]);
     });
 
     it('should select user2 details', async () => {
       await UserModel.create(users[1]);
-      const results = await User.select({ user_name: users[1].user_name });
-      await compareUserDeatils(results, users[1]);
+      const results = await getUserFromDB({ user_name: users[1].user_name });
+      await compareUserInfo(results, users[1]);
     });
   });
 
@@ -66,32 +77,46 @@ describe('User Table', () => {
     it('should update email of user1', async () => {
       await UserModel.create(users[0]);
       const newEmail = 'dhanalakshmi@gmail.com';
-      await User.update({ user_name: users[0].user_name, email: newEmail });
+      const isUpdatedd = await updateUserInDB({
+        user_name: users[0].user_name,
+        email: newEmail
+      });
+      expect(isUpdatedd).to.be.true;
 
       const results = await UserModel.findAll({
         raw: true,
         where: { user_name: users[0].user_name }
       });
-      await compareUserDeatils(results, users[0]);
+      expect(results).to.have.lengthOf(1);
+      await compareUserInfo(results[0], users[0]);
     });
 
     it('should update email of user2', async () => {
       await UserModel.create(users[1]);
       const newEmail = 'sailaja@gmail.com';
-      await User.update({ user_name: users[1].user_name, email: newEmail });
+      const isUpdated = await updateUserInDB({
+        user_name: users[1].user_name,
+        email: newEmail
+      });
+      expect(isUpdated).to.be.true;
 
       const results = await UserModel.findAll({
         raw: true,
         where: { user_name: users[1].user_name }
       });
-      await compareUserDeatils(results, users[1]);
+      expect(results).to.have.lengthOf(1);
+      await compareUserInfo(results[0], users[1]);
     });
   });
 
   describe('delete', () => {
     it('should delete user1', async () => {
       await UserModel.create(users[0]);
-      await User.delete({ user_name: users[0].user_name });
+      const isDeleted = await deleteUserFromDB({
+        user_name: users[0].user_name
+      });
+      expect(isDeleted).to.be.true;
+
       const results = await UserModel.findAll({
         raw: true,
         where: { user_name: users[0].user_name }
@@ -101,7 +126,11 @@ describe('User Table', () => {
 
     it('should delete user2', async () => {
       await UserModel.create(users[1]);
-      await User.delete({ user_name: users[1].user_name });
+      const isDeleted = await deleteUserFromDB({
+        user_name: users[1].user_name
+      });
+      expect(isDeleted).to.be.true;
+
       const results = await UserModel.findAll({
         raw: true,
         where: { user_name: users[1].user_name }
@@ -110,9 +139,7 @@ describe('User Table', () => {
     });
   });
 
-  const compareUserDeatils = async (results, user) => {
-    expect(results).to.have.lengthOf(1);
-    const userInfo = results[0];
+  const compareUserInfo = async (userInfo, user) => {
     expect(userInfo).to.have.property('user_name', user.user_name);
     expect(userInfo).to.have.property('password');
     expect(await bcrypt.compare(user.password, userInfo.password));

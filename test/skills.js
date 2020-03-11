@@ -1,9 +1,13 @@
 const expect = require('chai').expect;
 
+const {
+  insertSkillInDB,
+  getSkillInfoFromDB,
+  deleteSkillFromDB
+} = require('../src/services/skills');
 const sequelize = require('../src/utils/connect_sequelize');
 const SkillsModel = require('../src/models/skills')(sequelize);
-const Skills = require('../src/controller/skills');
-const Helper = require('./helper');
+const { truncateTable } = require('./helper');
 
 describe('Skills Table', () => {
   const skill1 = {
@@ -14,41 +18,57 @@ describe('Skills Table', () => {
   };
 
   beforeEach(async () => {
-    await Helper.truncateTable('skills');
+    await truncateTable('skills');
   });
 
   describe('insert', () => {
     it('should insert skill1', async () => {
-      const results = await Skills.selectOrInsert(skill1);
-      expect(results).to.have.property('name', skill1.name.toLowerCase());
+      const isInserted = await insertSkillInDB(skill1);
+      expect(isInserted).to.be.true;
+
+      const results = await SkillsModel.findAll({
+        raw: true,
+        where: { name: skill1.name.toLowerCase() }
+      });
+      expect(results).to.have.lengthOf(1);
+      expect(results[0]).to.have.property('name', skill1.name.toLowerCase());
     });
 
     it('should insert skill2', async () => {
-      const results = await Skills.selectOrInsert(skill2);
-      expect(results).to.have.property('name', skill2.name.toLowerCase());
+      const isInserted = await insertSkillInDB(skill2);
+      expect(isInserted).to.be.true;
+
+      const results = await SkillsModel.findAll({
+        raw: true,
+        where: { name: skill2.name.toLowerCase() }
+      });
+      expect(results).to.have.lengthOf(1);
+      expect(results[0]).to.have.property('name', skill2.name.toLowerCase());
     });
   });
 
   describe('select', () => {
     it('should select skill1', async () => {
-      await SkillsModel.create(skill1);
-      const results = await Skills.select({ name: skill1.name });
-      expect(results).to.have.lengthOf(1);
-      expect(results[0]).to.have.property('name', skill1.name);
+      const skillName = skill1.name.toLowerCase();
+      await SkillsModel.create({ name: skillName });
+      const skillInfo = await getSkillInfoFromDB({ name: skillName });
+      expect(skillInfo).to.have.property('name', skillName);
     });
 
     it('should select skill2', async () => {
-      await SkillsModel.create(skill2);
-      const results = await Skills.select({ name: skill2.name });
-      expect(results).to.have.lengthOf(1);
-      expect(results[0]).to.have.property('name', skill2.name);
+      const skillName = skill2.name.toLowerCase();
+      await SkillsModel.create({ name: skillName });
+      const skillInfo = await getSkillInfoFromDB({ name: skillName });
+      expect(skillInfo).to.have.property('name', skillName);
     });
   });
 
   describe('delete', () => {
     it('should delete skill1', async () => {
       await SkillsModel.create(skill1);
-      await Skills.delete({ name: skill1.name });
+      const isDeleted = await deleteSkillFromDB({ name: skill1.name });
+      expect(isDeleted).to.be.true;
+
       const results = await SkillsModel.findAll({
         raw: true,
         where: { name: skill1.name }
@@ -58,7 +78,9 @@ describe('Skills Table', () => {
 
     it('should delete skill2', async () => {
       await SkillsModel.create(skill2);
-      await Skills.delete({ name: skill2.name });
+      const isDeleted = await deleteSkillFromDB({ name: skill2.name });
+      expect(isDeleted).to.be.true;
+
       const results = await SkillsModel.findAll({
         raw: true,
         where: { name: skill2.name }

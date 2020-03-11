@@ -4,8 +4,13 @@ const sequelize = require('../src/utils/connect_sequelize');
 const ProjectAllocationModel = require('../src/models/project_allocation')(
   sequelize
 );
-const ProjectAllocation = require('../src/controller/project_allocation');
-const Helper = require('./helper');
+const {
+  insertProjectAllocationInfoInDB,
+  getProjectAllocationInfoFromDB,
+  updateProjectAllocationInfoInDB,
+  deleteProjectAllocationInfoFromDB
+} = require('../src/services/project_allocation');
+const { truncateTable, insertEmployee, insertProject } = require('./helper');
 const { employees, projects } = require('./data');
 
 describe('Project Allocation Table', () => {
@@ -25,16 +30,16 @@ describe('Project Allocation Table', () => {
   ];
 
   beforeEach(async () => {
-    await Helper.truncateTable('project_allocation');
-    await Helper.truncateTable('project');
-    await Helper.truncateTable('employee');
+    await truncateTable('project_allocation');
+    await truncateTable('project');
+    await truncateTable('employee');
   });
 
   describe('insert', () => {
     it('should insert employee1 and project1', async () => {
-      const employeeInfo = await Helper.insertEmployee(employees[0]);
-      const projectInfo = await Helper.insertProject(projects[0]);
-      await ProjectAllocation.insert(allocation[0]);
+      const employeeInfo = await insertEmployee(employees[0]);
+      const projectInfo = await insertProject(projects[0]);
+      await insertProjectAllocationInfoInDB(allocation[0]);
       const allocationInfo = await ProjectAllocationModel.findAll({
         raw: true,
         where: { employee_id: employeeInfo.id }
@@ -50,9 +55,9 @@ describe('Project Allocation Table', () => {
     });
 
     it('should insert employee2 and project2', async () => {
-      const employeeInfo = await Helper.insertEmployee(employees[1]);
-      const projectInfo = await Helper.insertProject(projects[1]);
-      await ProjectAllocation.insert(allocation[1]);
+      const employeeInfo = await insertEmployee(employees[1]);
+      const projectInfo = await insertProject(projects[1]);
+      await insertProjectAllocationInfoInDB(allocation[1]);
       const allocationInfo = await ProjectAllocationModel.findAll({
         raw: true,
         where: { employee_id: employeeInfo.id }
@@ -70,15 +75,15 @@ describe('Project Allocation Table', () => {
 
   describe('select', () => {
     it('should select employee project details based on emp_id', async () => {
-      const employeeInfo = await Helper.insertEmployee(employees[0]);
-      const projectInfo = await Helper.insertProject(projects[0]);
+      const employeeInfo = await insertEmployee(employees[0]);
+      const projectInfo = await insertProject(projects[0]);
       await ProjectAllocationModel.create({
         employee_id: employeeInfo.id,
         project_id: projectInfo.id,
         start_date: allocation[0].start_date,
         likely_end_date: allocation[0].likely_end_date
       });
-      const projectAllocationInfo = await ProjectAllocation.select({
+      const projectAllocationInfo = await getProjectAllocationInfoFromDB({
         emp_id: employees[0].emp_id
       });
       expect(projectAllocationInfo[0]).to.have.property('id');
@@ -93,9 +98,9 @@ describe('Project Allocation Table', () => {
     });
 
     it('should select project employee details based on project_name', async () => {
-      const employee1Info = await Helper.insertEmployee(employees[0]);
-      const employee2Info = await Helper.insertEmployee(employees[1]);
-      const projectInfo = await Helper.insertProject(projects[0]);
+      const employee1Info = await insertEmployee(employees[0]);
+      const employee2Info = await insertEmployee(employees[1]);
+      const projectInfo = await insertProject(projects[0]);
       await ProjectAllocationModel.create({
         employee_id: employee1Info.id,
         project_id: projectInfo.id,
@@ -109,7 +114,7 @@ describe('Project Allocation Table', () => {
         likely_end_date: allocation[0].likely_end_date
       });
 
-      const projectAllocationInfo = await ProjectAllocation.select({
+      const projectAllocationInfo = await getProjectAllocationInfoFromDB({
         project_name: projects[0].name
       });
       expect(projectAllocationInfo).to.have.lengthOf(2);
@@ -139,8 +144,8 @@ describe('Project Allocation Table', () => {
 
   describe('update', () => {
     it("should update employee1's project1 start_date", async () => {
-      const employeeInfo = await Helper.insertEmployee(employees[0]);
-      const projectInfo = await Helper.insertProject(projects[0]);
+      const employeeInfo = await insertEmployee(employees[0]);
+      const projectInfo = await insertProject(projects[0]);
       await ProjectAllocationModel.create({
         employee_id: employeeInfo.id,
         project_id: projectInfo.id,
@@ -149,7 +154,7 @@ describe('Project Allocation Table', () => {
       });
 
       const newStartDate = '2020-04-09';
-      await ProjectAllocation.update({
+      await updateProjectAllocationInfoInDB({
         emp_id: employees[0].emp_id,
         project_name: projects[0].name,
         start_date: newStartDate
@@ -171,8 +176,8 @@ describe('Project Allocation Table', () => {
     });
 
     it("should update employee1's project1 likely_end_date", async () => {
-      const employeeInfo = await Helper.insertEmployee(employees[0]);
-      const projectInfo = await Helper.insertProject(projects[0]);
+      const employeeInfo = await insertEmployee(employees[0]);
+      const projectInfo = await insertProject(projects[0]);
       await ProjectAllocationModel.create({
         employee_id: employeeInfo.id,
         project_id: projectInfo.id,
@@ -181,7 +186,7 @@ describe('Project Allocation Table', () => {
       });
 
       const newLikelyEndDate = '2020-05-19';
-      await ProjectAllocation.update({
+      await updateProjectAllocationInfoInDB({
         emp_id: employees[0].emp_id,
         project_name: projects[0].name,
         likely_end_date: newLikelyEndDate
@@ -205,8 +210,8 @@ describe('Project Allocation Table', () => {
 
   describe('delete', () => {
     it('should delete employee1 from project1', async () => {
-      const employeeInfo = await Helper.insertEmployee(employees[0]);
-      const projectInfo = await Helper.insertProject(projects[0]);
+      const employeeInfo = await insertEmployee(employees[0]);
+      const projectInfo = await insertProject(projects[0]);
       await ProjectAllocationModel.create({
         employee_id: employeeInfo.id,
         project_id: projectInfo.id,
@@ -215,7 +220,7 @@ describe('Project Allocation Table', () => {
       });
 
       const empIds = [employees[0].emp_id];
-      await ProjectAllocation.delete({
+      await deleteProjectAllocationInfoFromDB({
         emp_ids: empIds,
         project_name: projects[0].name
       });
@@ -230,9 +235,9 @@ describe('Project Allocation Table', () => {
     });
 
     it('should delete employee1 and employee2 from project1', async () => {
-      const employee1Info = await Helper.insertEmployee(employees[0]);
-      const employee2Info = await Helper.insertEmployee(employees[1]);
-      const projectInfo = await Helper.insertProject(projects[0]);
+      const employee1Info = await insertEmployee(employees[0]);
+      const employee2Info = await insertEmployee(employees[1]);
+      const projectInfo = await insertProject(projects[0]);
       await ProjectAllocationModel.create({
         employee_id: employee1Info.id,
         project_id: projectInfo.id,
@@ -247,7 +252,7 @@ describe('Project Allocation Table', () => {
       });
 
       const empIds = [employees[0].emp_id, employees[1].emp_id];
-      await ProjectAllocation.delete({
+      await deleteProjectAllocationInfoFromDB({
         emp_ids: empIds,
         project_name: projects[0].name
       });

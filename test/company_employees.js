@@ -1,31 +1,34 @@
 const expect = require('chai').expect;
 
-const CompanyEmployees = require('../src/controller/company_employees');
+const {
+  insertCompanyEmployees,
+  getCompanyEmployees,
+  deleteEmployeesFromCompany
+} = require('../src/services/company_employees');
 const sequelize = require('../src/utils/connect_sequelize');
 const CompanyEmployeesModel = require('../src/models/company_employees')(
   sequelize
 );
-const Helper = require('./helper');
+const { truncateTable, insertCompany, insertEmployee } = require('./helper');
 const { companies, employees } = require('./data');
-const CompanyModel = require('../src/models/company')(sequelize);
-const EmployeeModel = require('../src/models/employee')(sequelize);
 
 describe('CompanyEmployees table', () => {
   beforeEach(async () => {
-    await Helper.truncateTable('company');
-    await Helper.truncateTable('employee');
-    await Helper.truncateTable('company_employees');
+    await truncateTable('company');
+    await truncateTable('employee');
+    await truncateTable('company_employees');
   });
 
   describe('insert', () => {
     it('should insert employee1 into company1', async () => {
-      const companyInfo = await Helper.insertCompany(companies[0]);
-      const employeeInfo = await Helper.insertEmployee(employees[0]);
+      const companyInfo = await insertCompany(companies[0]);
+      const employeeInfo = await insertEmployee(employees[0]);
 
-      await CompanyEmployees.insert({
+      const isInserted = await insertCompanyEmployees({
         registration_no: companies[0].registration_no,
         emp_id: employees[0].emp_id
       });
+      expect(isInserted).to.be.true;
 
       const results = await CompanyEmployeesModel.findAll({
         raw: true,
@@ -35,13 +38,14 @@ describe('CompanyEmployees table', () => {
     });
 
     it('should insert employee2 into company2', async () => {
-      const companyInfo = await Helper.insertCompany(companies[1]);
-      const employeeInfo = await Helper.insertEmployee(employees[1]);
+      const companyInfo = await insertCompany(companies[1]);
+      const employeeInfo = await insertEmployee(employees[1]);
 
-      await CompanyEmployees.insert({
+      const isInserted = await insertCompanyEmployees({
         registration_no: companies[1].registration_no,
         emp_id: employees[1].emp_id
       });
+      expect(isInserted).to.be.true;
 
       const results = await CompanyEmployeesModel.findAll({
         raw: true,
@@ -54,12 +58,12 @@ describe('CompanyEmployees table', () => {
 
   describe('select', () => {
     it('should select company1 employees details', async () => {
-      const companyInfo = await Helper.insertCompany(companies[0]);
+      const companyInfo = await insertCompany(companies[0]);
 
       await insertEmployeeInCompany(employees[0], companyInfo.id);
       await insertEmployeeInCompany(employees[1], companyInfo.id);
 
-      const employeesInfo = await CompanyEmployees.select({
+      const employeesInfo = await getCompanyEmployees({
         registration_no: companies[0].registration_no
       });
       compareEmployeesInfo(employeesInfo, 2);
@@ -68,7 +72,7 @@ describe('CompanyEmployees table', () => {
 
   describe('delete', () => {
     it('should delete employee1 from company1', async () => {
-      const companyInfo = await Helper.insertCompany(companies[0]);
+      const companyInfo = await insertCompany(companies[0]);
 
       const employee1Id = await insertEmployeeInCompany(
         employees[0],
@@ -79,10 +83,11 @@ describe('CompanyEmployees table', () => {
         companyInfo.id
       );
 
-      await CompanyEmployees.delete({
+      const isDeleted = await deleteEmployeesFromCompany({
         registration_no: companies[0].registration_no,
         emp_id: employees[0].emp_id
       });
+      expect(isDeleted).to.be.true;
 
       const results = await CompanyEmployeesModel.findAll({
         raw: true,
@@ -95,7 +100,7 @@ describe('CompanyEmployees table', () => {
   });
 
   const insertEmployeeInCompany = async (employee, companyId) => {
-    const employeeInfo = await Helper.insertEmployee(employee);
+    const employeeInfo = await insertEmployee(employee);
     await CompanyEmployeesModel.create({
       employee_id: employeeInfo.id,
       company_id: companyId
