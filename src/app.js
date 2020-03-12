@@ -1,30 +1,24 @@
 const express = require('express');
 const app = express();
 const morgon = require('morgan');
-const jwt = require('jsonwebtoken');
 const log = require('loglevel');
 
-const userRoutes = require('./api/routes/user');
-const loginRoutes = require('./api/routes/login');
-const logoutRoutes = require('./api/routes/logout');
-const tokenRoutes = require('./api/routes/token');
-const companyRoutes = require('./api/routes/company');
-const employeeRoutes = require('./api/routes/employee');
-const employeeSkillsRoutes = require('./api/routes/employee_skills');
-const companyEmployeesRoutes = require('./api/routes/company_employees');
-const clientRoutes = require('./api/routes/client');
-const projectRoutes = require('./api/routes/project');
-const clientProjectsRoutes = require('./api/routes/client_projects');
-const allocateProjectRoutes = require('./api/routes/allocate_project');
-const employeesAvailabilityRoutes = require('./api/routes/employees_availability');
+const userRoutes = require('./routes/user');
+const authenticationRoutes = require('./routes/authentication');
+const companyRoutes = require('./routes/company');
+const employeeRoutes = require('./routes/employee');
+const employeeSkillsRoutes = require('./routes/employee_skills');
+const companyEmployeesRoutes = require('./routes/company_employees');
+const clientRoutes = require('./routes/client');
+const projectRoutes = require('./routes/project');
+const clientProjectsRoutes = require('./routes/client_projects');
+const allocateProjectRoutes = require('./routes/allocate_project');
+const employeesAvailabilityRoutes = require('./routes/employees_availability');
+
+const { authorize } = require('./controllers/authentication');
 
 app.use(morgon('dev'));
 app.use(express.json());
-
-app.use((req, res, next) => {
-  log.trace(`\n\nRequest: ${req}`);
-  next();
-});
 
 // Handling CORS errors
 app.use((req, res, next) => {
@@ -40,24 +34,10 @@ app.use((req, res, next) => {
   next();
 });
 
-//Authentication
-const authenticate = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
-  if (token == null) return res.sendStatus(401);
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    req.user = user;
-    next();
-  });
-};
-
 app.use('/user', userRoutes);
-app.use('/login', loginRoutes);
+app.use('/auth', authenticationRoutes);
 
-app.use(authenticate);
-app.use('/logout', logoutRoutes);
-app.use('/token', tokenRoutes);
+app.use(authorize);
 app.use('/company', companyRoutes);
 app.use('/employee', employeeRoutes);
 app.use('/employee_skills', employeeSkillsRoutes);
