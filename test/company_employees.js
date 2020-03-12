@@ -1,9 +1,9 @@
 const expect = require('chai').expect;
 
 const {
-  insertCompanyEmployees,
-  getCompanyEmployees,
-  deleteEmployeesFromCompany
+  insertCompanyEmployeesInDB,
+  getCompanyEmployeesFromDB,
+  deleteEmployeesFromCompanyInDB
 } = require('../src/services/company_employees');
 const sequelize = require('../src/utils/connect_sequelize');
 const CompanyEmployeesModel = require('../src/models/company_employees')(
@@ -24,7 +24,7 @@ describe('CompanyEmployees table', () => {
       const companyInfo = await insertCompany(companies[0]);
       const employeeInfo = await insertEmployee(employees[0]);
 
-      const isInserted = await insertCompanyEmployees({
+      const isInserted = await insertCompanyEmployeesInDB({
         registration_no: companies[0].registration_no,
         emp_id: employees[0].emp_id
       });
@@ -41,7 +41,7 @@ describe('CompanyEmployees table', () => {
       const companyInfo = await insertCompany(companies[1]);
       const employeeInfo = await insertEmployee(employees[1]);
 
-      const isInserted = await insertCompanyEmployees({
+      const isInserted = await insertCompanyEmployeesInDB({
         registration_no: companies[1].registration_no,
         emp_id: employees[1].emp_id
       });
@@ -63,7 +63,7 @@ describe('CompanyEmployees table', () => {
       await insertEmployeeInCompany(employees[0], companyInfo.id);
       await insertEmployeeInCompany(employees[1], companyInfo.id);
 
-      const employeesInfo = await getCompanyEmployees({
+      const employeesInfo = await getCompanyEmployeesFromDB({
         registration_no: companies[0].registration_no
       });
       compareEmployeesInfo(employeesInfo, 2);
@@ -83,7 +83,7 @@ describe('CompanyEmployees table', () => {
         companyInfo.id
       );
 
-      const isDeleted = await deleteEmployeesFromCompany({
+      const isDeleted = await deleteEmployeesFromCompanyInDB({
         registration_no: companies[0].registration_no,
         emp_id: employees[0].emp_id
       });

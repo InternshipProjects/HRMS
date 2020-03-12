@@ -15,22 +15,19 @@ const insertCompany = async company => {
     where: { registration_no: company.registration_no }
   });
   expect(results).to.have.lengthOf(1);
-  compareCompanyResults(results, company);
+  compareCompanyResults(results[0], company);
   return results[0];
 };
 
-const compareCompanyResults = (results, company) => {
-  expect(results).to.have.lengthOf(1);
-  const companyInfo = results[0];
-
-  expect(companyInfo).to.have.property('name', company.name);
-  expect(companyInfo).to.have.property('address', company.address);
+const compareCompanyResults = (companyInfo, expectedInfo) => {
+  expect(companyInfo).to.have.property('name', expectedInfo.name);
+  expect(companyInfo).to.have.property('address', expectedInfo.address);
   expect(companyInfo).to.have.property(
     'registration_no',
-    company.registration_no
+    expectedInfo.registration_no
   );
-  expect(companyInfo).to.have.property('phone_no', company.phone_no);
-  expect(companyInfo).to.have.property('website', company.website);
+  expect(companyInfo).to.have.property('phone_no', expectedInfo.phone_no);
+  expect(companyInfo).to.have.property('website', expectedInfo.website);
 };
 
 const insertEmployee = async employee => {

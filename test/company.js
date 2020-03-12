@@ -25,7 +25,8 @@ describe('Company table', () => {
         raw: true,
         where: { name: companies[0].name }
       });
-      compareCompanyResults(results, companies[0]);
+      expect(results).to.have.lengthOf(1);
+      compareCompanyResults(results[0], companies[0]);
     });
 
     it('should insert company2', async () => {
@@ -36,21 +37,22 @@ describe('Company table', () => {
         raw: true,
         where: { name: companies[1].name }
       });
-      compareCompanyResults(results, companies[1]);
+      expect(results).to.have.lengthOf(1);
+      compareCompanyResults(results[0], companies[1]);
     });
   });
 
   describe('select', () => {
     it('should select company1 details', async () => {
       await CompanyModel.create(companies[0]);
-      const results = await getCompanyFromDB({ name: companies[0].name });
-      compareCompanyResults(results, companies[0]);
+      const company = await getCompanyFromDB({ name: companies[0].name });
+      compareCompanyResults(company, companies[0]);
     });
 
     it('should select company2 details', async () => {
       await CompanyModel.create(companies[1]);
-      const results = await getCompanyFromDB({ name: companies[1].name });
-      compareCompanyResults(results, companies[1]);
+      const company = await getCompanyFromDB({ name: companies[1].name });
+      compareCompanyResults(company, companies[1]);
     });
   });
 
@@ -69,11 +71,12 @@ describe('Company table', () => {
         raw: true,
         where: { registration_no: companies[0].registration_no }
       });
+      expect(results).to.have.lengthOf(1);
 
       const updatedCompanyDetails = Object.assign(companies[0], {});
       updatedCompanyDetails.name = comapanyNewName;
 
-      compareCompanyResults(results, updatedCompanyDetails);
+      compareCompanyResults(results[0], updatedCompanyDetails);
     });
 
     it('should update company2 details', async () => {
@@ -90,11 +93,12 @@ describe('Company table', () => {
         raw: true,
         where: { registration_no: companies[1].registration_no }
       });
+      expect(results).to.have.lengthOf(1);
 
       const updatedCompanyDetails = Object.assign(companies[1], {});
       updatedCompanyDetails.name = comapanyNewName;
 
-      compareCompanyResults(results, updatedCompanyDetails);
+      compareCompanyResults(results[0], updatedCompanyDetails);
     });
   });
 
