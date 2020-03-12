@@ -5,20 +5,20 @@ const { getEmployeeFromDB } = require('./employee');
 const { getCompanyFromDB } = require('./company');
 
 // params: {registration_no: string, emp_id: string}
-const insertCompanyEmployees = async params => {
+const insertCompanyEmployeesInDB = async params => {
   const employeeInfo = await getEmployeeFromDB({ emp_id: params.emp_id });
   const companyInfo = await getCompanyFromDB({
     registration_no: params.registration_no
   });
   const insertedRecord = await CompanyEmployeesModel.create({
     employee_id: employeeInfo.id,
-    company_id: companyInfo[0].id
+    company_id: companyInfo.id
   });
   return insertedRecord ? true : false;
 };
 
 // params: {registration_no: string}
-const getCompanyEmployees = async params => {
+const getCompanyEmployeesFromDB = async params => {
   const companyInfo = await getCompanyFromDB({
     registration_no: params.registration_no
   });
@@ -28,7 +28,7 @@ const getCompanyEmployees = async params => {
   return await CompanyEmployeesModel.findAll({
     raw: true,
     attributes: [],
-    where: { company_id: companyInfo[0].id },
+    where: { company_id: companyInfo.id },
     include: [
       {
         model: EmployeeModel,
@@ -39,19 +39,19 @@ const getCompanyEmployees = async params => {
 };
 
 // params: {registration_no: string, emp_id: string}
-const deleteEmployeesFromCompany = async params => {
+const deleteEmployeesFromCompanyInDB = async params => {
   const employeeInfo = await getEmployeeFromDB({ emp_id: params.emp_id });
   const companyInfo = await getCompanyFromDB({
     registration_no: params.registration_no
   });
   const deletedRecord = await CompanyEmployeesModel.destroy({
-    where: { employee_id: employeeInfo.id, company_id: companyInfo[0].id }
+    where: { employee_id: employeeInfo.id, company_id: companyInfo.id }
   });
   return deletedRecord ? true : false;
 };
 
 module.exports = {
-  insertCompanyEmployees,
-  getCompanyEmployees,
-  deleteEmployeesFromCompany
+  insertCompanyEmployeesInDB,
+  getCompanyEmployeesFromDB,
+  deleteEmployeesFromCompanyInDB
 };

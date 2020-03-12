@@ -8,11 +8,16 @@ const insertEmployeeSkillsInDB = async params => {
   const skills = params.skills;
   const employeeInfo = await getEmployeeFromDB({ emp_id: params.emp_id });
   const promises = skills.map(async skill => {
-    await insertSkillInDB({ name: skill });
-    const skillInfo = await getSkillInfoFromDB({ name: skill });
-    return EmployeeSkillsModel.create({
-      employee_id: employeeInfo.id,
-      skill_id: skillInfo.id
+    let skillInfo = await getSkillInfoFromDB({ name: skill });
+    if (!skillInfo || !skillInfo.id) {
+      await insertSkillInDB({ name: skill });
+      skillInfo = await getSkillInfoFromDB({ name: skill });
+    }
+    return EmployeeSkillsModel.findOrCreate({
+      where: {
+        employee_id: employeeInfo.id,
+        skill_id: skillInfo.id
+      }
     });
   });
   const insertedRecords = await Promise.all(promises);
@@ -36,13 +41,15 @@ const getEmployeeSkillsFromDB = async params => {
 // params: { emp_id: string, skills: string[] }
 const deleteEmployeeSkillsFromDB = async params => {
   const employeeInfo = await getEmployeeFromDB({ emp_id: params.emp_id });
-  const promises = params.skills.map(async skillName => {
+  const skills = params.skills;
+  const promises = skills.map(async skillName => {
     const skillInfo = await getSkillInfoFromDB({ name: skillName });
-    await EmployeeSkillsModel.destroy({
+    return EmployeeSkillsModel.destroy({
       where: { employee_id: employeeInfo.id, skill_id: skillInfo.id }
     });
   });
-  return Promise.all(promises);
+  const deletedRecords = await Promise.all(promises);
+  return deletedRecords.length === skills.length;
 };
 
 module.exports = {

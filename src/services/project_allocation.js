@@ -9,12 +9,13 @@ const { getProjectFromDB } = require('./project');
 const insertProjectAllocationInfoInDB = async params => {
   const employeeInfo = await getEmployeeFromDB({ emp_id: params.emp_id });
   const projectInfo = await getProjectFromDB({ name: params.project_name });
-  await ProjectAllocationModel.create({
+  const insertedRecord = await ProjectAllocationModel.create({
     employee_id: employeeInfo.id,
     project_id: projectInfo.id,
     start_date: params.start_date,
     likely_end_date: params.likely_end_date
   });
+  return insertedRecord ? true : false;
 };
 
 // params: { emp_id?: string, project_name?: string }
@@ -72,9 +73,10 @@ const updateProjectAllocationInfoInDB = async params => {
   if (params.likely_end_date) {
     updateParams['likely_end_date'] = params.likely_end_date;
   }
-  await ProjectAllocationModel.update(updateParams, {
+  const updatedRecord = await ProjectAllocationModel.update(updateParams, {
     where: { id: allocationInfo[0].id }
   });
+  return updatedRecord ? true : false;
 };
 
 //param: {emp_id: string[], project_name: string}
@@ -89,7 +91,8 @@ const deleteProjectAllocationInfoFromDB = async params => {
       where: { id: allocationInfo[0].id }
     });
   });
-  await Promise.all(promises);
+  const deletedRecords = await Promise.all(promises);
+  return deletedRecords.length === empIds.length;
 };
 
 module.exports = {

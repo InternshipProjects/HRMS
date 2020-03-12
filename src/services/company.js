@@ -7,7 +7,7 @@ const insertCompanyInDB = async params => {
 };
 
 const getCompanyFromDB = async params => {
-  return CompanyModel.findAll({ raw: true, where: params });
+  return CompanyModel.findOne({ raw: true, where: params });
 };
 
 const updateCompanyInDB = async params => {
