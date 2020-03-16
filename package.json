@@ -4,7 +4,8 @@
   "description": "HRMS database",
   "main": "index.js",
   "scripts": {
-    "test": "mocha || true",
+    "testWatch": "jest --watchAll",
+    "test": "jest",
     "automate": "sequelize-automate -c sequelize-automate.config.js",
     "start": "nodemon src/server.js"
   },
@@ -31,8 +32,7 @@
     "sequelize-automate": "^1.2.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0",
-    "mocha": "^7.1.0",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2"
   }
 }
